@@ -26,6 +26,32 @@ class FileCreation(unittest.TestCase):
         pdb = pybiomol.get_pdb_from_file("tests/pdb/basic.pdb")
 
 
+    def test_has_records(self):
+        with open("tests/pdb/basic.pdb") as f:
+            pdb = PdbFile(f.read())
+            self.assertIsInstance(pdb.records, list)
+            self.assertEqual(len(pdb.records), 9)
+            for record in pdb.records:
+                self.assertIsInstance(record, PdbRecord)
+
+
+    def test_file_repr(self):
+        with open("tests/pdb/basic.pdb") as f:
+            pdb = PdbFile(f.read())
+            self.assertEqual(
+             str(pdb),
+             "<PdbFile (9 Records)>"
+            )
+
+
+    def test_index_access(self):
+        with open("tests/pdb/basic.pdb") as f:
+            pdb = PdbFile(f.read())
+            record = pdb[0]
+            self.assertIsInstance(record, PdbRecord)
+            self.assertEqual(record.name, "HEADER")
+
+
     def test_can_get_by_file_remotely(self):
         pdb = pybiomol.get_pdb_remotely("1LOL")
 

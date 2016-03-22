@@ -4,6 +4,18 @@ class PdbFile:
         self.file_contents = "".join([
          char for char in file_contents if 32 <= ord(char) <= 126 or char=="\n"
         ])
+        self.records = [
+         PdbRecord(i, line) for i, line in
+          enumerate(self.file_contents.split("\n")) if line
+        ]
+
+
+    def __repr__(self):
+        return "<PdbFile (%i Records)>" % len(self.records)
+
+
+    def __getitem__(self, key):
+        return self.records[key]
 
 
 
