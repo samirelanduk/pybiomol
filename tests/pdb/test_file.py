@@ -37,5 +37,32 @@ class FileCreation(unittest.TestCase):
         )
 
 
+
+class RecordTests(unittest.TestCase):
+
+    def test_create_record(self):
+        record = PdbRecord(45, "TEST   123  123")
+        self.assertEqual(len(record.text), 80)
+        self.assertEqual(record.name, "TEST")
+        self.assertEqual(record.number, 45)
+        self.assertTrue(record.contents.startswith(" 123  123"))
+        self.assertEqual(len(record.contents), 74)
+
+
+    def test_record_repr(self):
+        record = PdbRecord(45, "TEST   123  123")
+        self.assertEqual(
+         str(record),
+         "<TEST Record>"
+        )
+
+
+    def test_index_access(self):
+        record = PdbRecord(45, "TEST   123  123")
+        self.assertEqual(record[0], "T")
+        self.assertEqual(record[70], " ")
+        self.assertEqual(record[7:10], "123")
+
+
 if __name__ == "__main__":
     unittest.main()
