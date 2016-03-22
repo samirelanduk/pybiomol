@@ -18,6 +18,12 @@ class PdbFile:
         return self.records[key]
 
 
+    def get_records_by_name(self, record_title):
+        return [
+         r for r in self.records if r.name.upper() == record_title.upper()
+        ]
+
+
 
 class PdbRecord:
 

@@ -52,6 +52,16 @@ class FileCreation(unittest.TestCase):
             self.assertEqual(record.name, "HEADER")
 
 
+    def test_record_access(self):
+        with open("tests/pdb/basic.pdb") as f:
+            pdb = PdbFile(f.read())
+            records = pdb.get_records_by_name("COMPND")
+            self.assertIsInstance(records, list)
+            self.assertEqual(len(records), 6)
+            for record in records:
+                self.assertIsInstance(record, PdbRecord)
+
+
     def test_can_get_by_file_remotely(self):
         pdb = pybiomol.get_pdb_remotely("1LOL")
 
