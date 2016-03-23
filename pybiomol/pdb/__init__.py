@@ -1,11 +1,18 @@
 import requests
 from .file import *
+from .datafile import *
 from .exceptions import *
+
+def get_pdb_from_string(string):
+    pdb_file = PdbFile(string)
+    pdb_datafile = PdbDataFile(pdb_file)
+    return pdb_datafile
+
 
 def get_pdb_from_file(path):
     with open(path) as f:
-        pdb_file = PdbFile(f.read())
-    return pdb_file
+        pdb = get_pdb_from_string(f.read())
+    return pdb
 
 
 def get_pdb_remotely(code):
@@ -19,5 +26,5 @@ def get_pdb_remotely(code):
          "%s does not seem to be a valid PDB code." % code
         )
 
-    pdb_file = PdbFile(contents)
-    return pdb_file
+    pdb = get_pdb_from_string(contents)
+    return pdb
