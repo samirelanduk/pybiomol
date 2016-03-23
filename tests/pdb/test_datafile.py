@@ -2,6 +2,7 @@ import unittest
 import sys
 sys.path.append(".")
 import pybiomol
+import datetime
 
 class TitleSectionTest(unittest.TestCase):
 
@@ -12,7 +13,15 @@ class TitleSectionTest(unittest.TestCase):
 
 
     def test_can_make_datafile(self):
-        self.assertEqual(str(self.data_file), "<PdbDataFile>")
+        self.assertRegex(str(self.data_file), r"<[\S]{4} PdbDataFile>")
+
+
+    def test_header(self):
+        self.assertEqual(self.data_file.classification, "LYASE")
+        self.assertEqual(
+         self.data_file.deposition_date, datetime.datetime(2006, 5, 2).date()
+        )
+        self.assertEqual(self.data_file.pdb_code, "1LOL")
 
 
 

@@ -1,8 +1,21 @@
+import datetime
+
 class PdbDataFile:
 
     def __init__(self, pdb_file):
         self.pdb_file = pdb_file
 
+        self.process_header()
+
 
     def __repr__(self):
-        return "<PdbDataFile>"
+        return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
+
+
+    def process_header(self):
+        header = self.pdb_file.get_record_by_name("HEADER")
+        self.classification = header[10:50].strip() if header else None
+        self.deposition_date = datetime.datetime.strptime(
+         header[50:59], "%y-%b-%d"
+        ).date() if header else None
+        self.pdb_code = header[62:66].strip() if header else None

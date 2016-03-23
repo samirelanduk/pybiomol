@@ -18,9 +18,15 @@ class PdbFile:
         return self.records[key]
 
 
-    def get_records_by_name(self, record_title):
+    def get_record_by_name(self, record_name):
+        for record in self.records:
+            if record.name.upper() == record_name.upper():
+                return record
+
+                
+    def get_records_by_name(self, record_name):
         return [
-         r for r in self.records if r.name.upper() == record_title.upper()
+         r for r in self.records if r.name.upper() == record_name.upper()
         ]
 
 
