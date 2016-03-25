@@ -7,7 +7,7 @@ import datetime
 class TitleSectionTest(unittest.TestCase):
 
     def setUp(self):
-        with open("tests/pdb/title_data.pdb") as f:
+        with open("tests/pdb/pdb_files/title_data.pdb") as f:
             pdb_file = pybiomol.PdbFile(f.read())
             self.data_file = pybiomol.PdbDataFile(pdb_file)
 
@@ -19,9 +19,21 @@ class TitleSectionTest(unittest.TestCase):
     def test_header(self):
         self.assertEqual(self.data_file.classification, "LYASE")
         self.assertEqual(
-         self.data_file.deposition_date, datetime.datetime(2006, 5, 2).date()
+         self.data_file.deposition_date, datetime.datetime(2002, 5, 6).date()
         )
         self.assertEqual(self.data_file.pdb_code, "1LOL")
+
+
+    def test_obslte(self):
+        self.assertTrue(self.data_file.is_obsolete)
+        self.assertEqual(
+         self.data_file.obsolete_date,
+         datetime.datetime(1994, 1, 31).date()
+        )
+        self.assertEqual(
+         self.data_file.replacement_code,
+         "2MBP"
+        )
 
 
 

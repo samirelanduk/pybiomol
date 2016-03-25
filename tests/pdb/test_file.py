@@ -7,12 +7,12 @@ from pybiomol.pdb.file import *
 class FileCreation(unittest.TestCase):
 
     def test_can_make_basic_pdb(self):
-        with open("tests/pdb/basic.pdb") as f:
+        with open("tests/pdb/pdb_files/basic.pdb") as f:
             pdb = PdbFile(f.read())
 
 
     def test_weird_characters_expelled(self):
-        with open("tests/pdb/weird_chars.pdb") as f:
+        with open("tests/pdb/pdb_files/weird_chars.pdb") as f:
             contents = f.read()
             chars = len(contents)
             pdb = PdbFile(contents)
@@ -23,11 +23,11 @@ class FileCreation(unittest.TestCase):
 
 
     def test_can_get_by_file_name(self):
-        pdb = pybiomol.get_pdb_from_file("tests/pdb/basic.pdb")
+        pdb = pybiomol.get_pdb_from_file("tests/pdb/pdb_files/basic.pdb")
 
 
     def test_has_records(self):
-        with open("tests/pdb/basic.pdb") as f:
+        with open("tests/pdb/pdb_files/basic.pdb") as f:
             pdb = PdbFile(f.read())
             self.assertIsInstance(pdb.records, list)
             self.assertEqual(len(pdb.records), 9)
@@ -36,7 +36,7 @@ class FileCreation(unittest.TestCase):
 
 
     def test_file_repr(self):
-        with open("tests/pdb/basic.pdb") as f:
+        with open("tests/pdb/pdb_files/basic.pdb") as f:
             pdb = PdbFile(f.read())
             self.assertEqual(
              str(pdb),
@@ -45,7 +45,7 @@ class FileCreation(unittest.TestCase):
 
 
     def test_index_access(self):
-        with open("tests/pdb/basic.pdb") as f:
+        with open("tests/pdb/pdb_files/basic.pdb") as f:
             pdb = PdbFile(f.read())
             record = pdb[0]
             self.assertIsInstance(record, PdbRecord)
@@ -53,7 +53,7 @@ class FileCreation(unittest.TestCase):
 
 
     def test_record_access(self):
-        with open("tests/pdb/basic.pdb") as f:
+        with open("tests/pdb/pdb_files/basic.pdb") as f:
             pdb = PdbFile(f.read())
             records = pdb.get_records_by_name("COMPND")
             self.assertIsInstance(records, list)
