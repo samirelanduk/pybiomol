@@ -7,6 +7,7 @@ class PdbDataFile:
 
         self.process_header()
         self.process_obslte()
+        self.process_title()
 
 
     def __repr__(self):
@@ -29,3 +30,8 @@ class PdbDataFile:
          obslte[11:20], "%d-%b-%y"
         ).date() if obslte else None
         self.replacement_code = obslte[31:35] if obslte else None
+
+
+    def process_title(self):
+        titles = self.pdb_file.get_records_by_name("TITLE")
+        self.title = " ".join([r[10:].strip() for r in titles])

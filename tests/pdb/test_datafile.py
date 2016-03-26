@@ -36,6 +36,13 @@ class TitleSectionTest(unittest.TestCase):
         )
 
 
+    def test_title(self):
+        self.assertEqual(
+         self.data_file.title,
+         "CRYSTAL STRUCTURE OF OROTIDINE MONOPHOSPHATE DECARBOXYLASE COMPLEX WITH XMP"
+        )
+
+
 
 if __name__ == "__main__":
     unittest.main()
