@@ -8,6 +8,7 @@ class PdbDataFile:
         self.process_header()
         self.process_obslte()
         self.process_title()
+        self.process_split()
 
 
     def __repr__(self):
@@ -35,3 +36,8 @@ class PdbDataFile:
     def process_title(self):
         titles = self.pdb_file.get_records_by_name("TITLE")
         self.title = " ".join([r[10:].strip() for r in titles])
+
+
+    def process_split(self):
+        splits = self.pdb_file.get_records_by_name("SPLIT")
+        self.split_codes = " ".join([r[10:].strip() for r in splits]).split()

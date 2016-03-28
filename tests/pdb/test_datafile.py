@@ -43,6 +43,18 @@ class TitleSectionTest(unittest.TestCase):
         )
 
 
+    def test_split(self):
+        self.assertEqual(
+         self.data_file.split_codes,
+         [
+          "1VOQ", "1VOR", "1VOS", "1VOU", "1VOV", "1VOW",
+          "1VOX", "1VOY", "1VP0", "1VOZ", "1VOY", "1VP0",
+          "1VOZ", "1VOZ", "1VOQ", "1VOR", "1VOS", "1VOU",
+          "1VOV", "1VOW", "1VOX", "1VOY", "1VP0", "1VOZ"
+         ]
+        )
+
+
 
 if __name__ == "__main__":
     unittest.main()
