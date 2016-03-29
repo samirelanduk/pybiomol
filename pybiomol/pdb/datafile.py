@@ -9,10 +9,15 @@ class PdbDataFile:
         self.process_obslte()
         self.process_title()
         self.process_split()
+        self.process_caveat()
 
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
+
+
+    def merge_records(self, records, start, join=" "):
+        return join.join([r[start:].strip() for r in records])
 
 
     def process_header(self):
@@ -35,9 +40,16 @@ class PdbDataFile:
 
     def process_title(self):
         titles = self.pdb_file.get_records_by_name("TITLE")
-        self.title = " ".join([r[10:].strip() for r in titles])
+        title = self.merge_records(titles, 10)
+        self.title = title if title else None
 
 
     def process_split(self):
         splits = self.pdb_file.get_records_by_name("SPLIT")
         self.split_codes = " ".join([r[10:].strip() for r in splits]).split()
+
+
+    def process_caveat(self):
+        caveats = self.pdb_file.get_records_by_name("CAVEAT")
+        caveat = self.merge_records(caveats, 19)
+        self.caveat = caveat if caveat else None
