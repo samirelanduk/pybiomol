@@ -72,6 +72,59 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.caveat, None)
 
 
+    def test_compnd(self):
+        self.assertEqual(
+         self.data_file.compounds,
+         [
+          {
+           "MOL_ID": 1,
+           "MOLECULE": "COWPEA CHLOROTIC MOTTLE VIRUS",
+           "CHAIN": ["A", "B", "C"],
+           "MUTATION": False,
+           "SYNONYM": [
+            "MSTING",
+            "ENDOPLASMIC RETICULUM INTERFERON STIMULATOR",
+            "ERIS",
+            "MEDIATOR OF IRF3 ACTIVATION",
+            "MMITA",
+            "TRANSMEMBRANE PROTEIN 173"
+           ]
+          }, {
+           "MOL_ID": 2,
+           "MOLECULE":  "RNA (5'-(*AP*UP*AP*U)-3')",
+           "CHAIN": ["D", "F"],
+           "ENGINEERED": True
+          }, {
+           "MOL_ID": 3,
+           "MOLECULE":  "RNA (5'-(*AP*U)-3')",
+           "CHAIN": ["E"],
+           "ENGINEERED": True,
+           "EC": "3.2.1.14, 3.2.1.17"
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.compounds, [])
+
+
+    def test_source(self):
+        self.assertEqual(
+         self.data_file.sources,
+         [
+          {
+           "MOL_ID": 1,
+           "ORGANISM_SCIENTIFIC": "METHANOTHERMOBACTER THERMAUTOTROPHICUS STR. DELTA H",
+           "ORGANISM_TAXID": 187420,
+           "STRAIN": "DELTA H",
+           "EXPRESSION_SYSTEM": "ESCHERICHIA COLI",
+           "EXPRESSION_SYSTEM_TAXID": 562,
+           "EXPRESSION_SYSTEM_PLASMID": "PET15B"
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.sources, [])
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

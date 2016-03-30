@@ -10,6 +10,8 @@ class PdbDataFile:
         self.process_title()
         self.process_split()
         self.process_caveat()
+        self.process_compnd()
+        self.process_source()
 
 
     def __repr__(self):
@@ -17,7 +19,32 @@ class PdbDataFile:
 
 
     def merge_records(self, records, start, join=" "):
-        return join.join([r[start:].strip() for r in records])
+        string = join.join([r[start:].strip() for r in records])
+        string = string.replace("  ", " ").replace("; ", ";").replace(": ", ":")
+        return string
+
+
+    def records_to_token_value_dicts(self, records):
+        string = self.merge_records(records, 10)
+        pairs = string.split(";")
+        pairs = [pair.split(":") for pair in pairs if pair]
+        entities = []
+        entity = {}
+        for pair in pairs:
+            if pair[1] == "NO":
+                pair[1] = False
+            elif pair[1] == "YES":
+                pair[1] = True
+            elif pair[1].isnumeric():
+                pair[1] = int(pair[1])
+            elif pair[0] == "CHAIN" or pair[0] == "SYNONYM":
+                pair[1] = pair[1].replace(", ", ",").split(",")
+            if pair[0] == "MOL_ID":
+                if entity: entities.append(entity)
+                entity = {}
+            entity[pair[0]] = pair[1]
+        if entity: entities.append(entity)
+        return entities
 
 
     def process_header(self):
@@ -53,3 +80,13 @@ class PdbDataFile:
         caveats = self.pdb_file.get_records_by_name("CAVEAT")
         caveat = self.merge_records(caveats, 19)
         self.caveat = caveat if caveat else None
+
+
+    def process_compnd(self):
+        records = self.pdb_file.get_records_by_name("COMPND")
+        self.compounds = self.records_to_token_value_dicts(records)
+
+
+    def process_source(self):
+        records = self.pdb_file.get_records_by_name("SOURCE")
+        self.sources = self.records_to_token_value_dicts(records)
