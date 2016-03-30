@@ -12,6 +12,7 @@ class PdbDataFile:
         self.process_caveat()
         self.process_compnd()
         self.process_source()
+        self.process_keywds()
 
 
     def __repr__(self):
@@ -20,7 +21,7 @@ class PdbDataFile:
 
     def merge_records(self, records, start, join=" "):
         string = join.join([r[start:].strip() for r in records])
-        string = string.replace("  ", " ").replace("; ", ";").replace(": ", ":")
+        string = string.replace("  ", " ").replace("; ", ";").replace(": ", ":").replace(", ", ",")
         return string
 
 
@@ -90,3 +91,9 @@ class PdbDataFile:
     def process_source(self):
         records = self.pdb_file.get_records_by_name("SOURCE")
         self.sources = self.records_to_token_value_dicts(records)
+
+
+    def process_keywds(self):
+        keywords = self.pdb_file.get_records_by_name("KEYWDS")
+        keyword_text = self.merge_records(keywords, 10)
+        self.keywords = keyword_text.split(",") if keyword_text else []

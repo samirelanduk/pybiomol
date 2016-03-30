@@ -99,7 +99,7 @@ class TitleSectionTest(unittest.TestCase):
            "MOLECULE":  "RNA (5'-(*AP*U)-3')",
            "CHAIN": ["E"],
            "ENGINEERED": True,
-           "EC": "3.2.1.14, 3.2.1.17"
+           "EC": "3.2.1.14,3.2.1.17"
           }
          ]
         )
@@ -122,6 +122,14 @@ class TitleSectionTest(unittest.TestCase):
          ]
         )
         self.assertEqual(self.empty_data_file.sources, [])
+
+
+    def test_keywds(self):
+        self.assertEqual(
+         self.data_file.keywords,
+         ["LYASE",  "TRICARBOXYLIC ACID CYCLE", "MITOCHONDRION", "OXIDATIVE METABOLISM"]
+        )
+        self.assertEqual(self.empty_data_file.keywords, [])
 
 
 
