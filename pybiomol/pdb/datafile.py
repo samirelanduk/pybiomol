@@ -15,15 +15,18 @@ class PdbDataFile:
         self.process_keywds()
         self.process_expdta()
         self.process_nummdl()
+        self.process_mdltyp()
 
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
 
 
-    def merge_records(self, records, start, join=" "):
+    def merge_records(self, records, start, join=" ", dont_condense=""):
         string = join.join([r[start:] for r in records])
-        string = string.replace("  ", " ").replace("; ", ";").replace(": ", ":").replace(", ", ",")
+        condense = [char for char in " ;:," if char not in dont_condense]
+        for char in condense:
+            string = string.replace(char + " ", char)
         return string
 
 
@@ -110,3 +113,11 @@ class PdbDataFile:
     def process_nummdl(self):
         nummdl = self.pdb_file.get_record_by_name("NUMMDL")
         self.model_num = int(nummdl[10:14]) if nummdl and nummdl[10:14] else 1
+
+
+    def process_mdltyp(self):
+        mdltyps = self.pdb_file.get_records_by_name("MDLTYP")
+        mdltyp_text = self.merge_records(mdltyps, 10, dont_condense=",")
+        self.model_annotations = [
+         ann.strip() for ann in mdltyp_text.split(";") if ann.strip()
+        ]

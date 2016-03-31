@@ -145,6 +145,17 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.model_num, 1)
 
 
+    def test_mdltyp(self):
+        self.assertEqual(
+         self.data_file.model_annotations,
+         [
+          "CA ATOMS ONLY, CHAIN A, B, C, D, E, F, G, H, I, J, K",
+          "P ATOMS ONLY, CHAIN X, Y, Z"
+         ]
+        )
+        self.assertEqual(self.empty_data_file.model_annotations, [])
+
+
 
 
 if __name__ == "__main__":
