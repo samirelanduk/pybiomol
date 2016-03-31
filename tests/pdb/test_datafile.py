@@ -132,6 +132,14 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.keywords, [])
 
 
+    def test_expdata(self):
+        self.assertEqual(
+         self.data_file.experimental_techniques,
+         ["NEUTRON DIFFRACTION", "X-RAY DIFFRACTION"]
+        )
+        self.assertEqual(self.empty_data_file.experimental_techniques, [])
+
+
 
 
 if __name__ == "__main__":

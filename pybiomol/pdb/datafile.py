@@ -13,6 +13,7 @@ class PdbDataFile:
         self.process_compnd()
         self.process_source()
         self.process_keywds()
+        self.process_expdta()
 
 
     def __repr__(self):
@@ -97,3 +98,9 @@ class PdbDataFile:
         keywords = self.pdb_file.get_records_by_name("KEYWDS")
         keyword_text = self.merge_records(keywords, 10)
         self.keywords = keyword_text.split(",") if keyword_text else []
+
+
+    def process_expdta(self):
+        expdta = self.pdb_file.get_records_by_name("EXPDTA")
+        expdta_text = self.merge_records(expdta, 10)
+        self.experimental_techniques = expdta_text.split(";") if expdta_text else []
