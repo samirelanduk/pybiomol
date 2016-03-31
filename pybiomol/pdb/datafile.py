@@ -14,6 +14,7 @@ class PdbDataFile:
         self.process_source()
         self.process_keywds()
         self.process_expdta()
+        self.process_nummdl()
 
 
     def __repr__(self):
@@ -21,7 +22,7 @@ class PdbDataFile:
 
 
     def merge_records(self, records, start, join=" "):
-        string = join.join([r[start:].strip() for r in records])
+        string = join.join([r[start:] for r in records])
         string = string.replace("  ", " ").replace("; ", ";").replace(": ", ":").replace(", ", ",")
         return string
 
@@ -104,3 +105,8 @@ class PdbDataFile:
         expdta = self.pdb_file.get_records_by_name("EXPDTA")
         expdta_text = self.merge_records(expdta, 10)
         self.experimental_techniques = expdta_text.split(";") if expdta_text else []
+
+
+    def process_nummdl(self):
+        nummdl = self.pdb_file.get_record_by_name("NUMMDL")
+        self.model_num = int(nummdl[10:14]) if nummdl and nummdl[10:14] else 1

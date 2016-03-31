@@ -96,8 +96,10 @@ class RecordTests(unittest.TestCase):
     def test_index_access(self):
         record = PdbRecord(45, "TEST   123  123")
         self.assertEqual(record[0], "T")
-        self.assertEqual(record[70], " ")
+        self.assertEqual(record[70], None)
         self.assertEqual(record[7:10], "123")
+        self.assertEqual(record[6:11], "123")
+        self.assertEqual(record[4:7], None)
 
 
 if __name__ == "__main__":

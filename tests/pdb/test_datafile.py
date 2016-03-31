@@ -140,6 +140,11 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.experimental_techniques, [])
 
 
+    def test_nummdl(self):
+        self.assertEqual(self.data_file.model_num, 20)
+        self.assertEqual(self.empty_data_file.model_num, 1)
+
+
 
 
 if __name__ == "__main__":
