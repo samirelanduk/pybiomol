@@ -156,6 +156,16 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.model_annotations, [])
 
 
+    def test_author(self):
+        self.assertEqual(
+         self.data_file.authors,
+         [
+          "M.B.BERRY", "B.MEADOR", "T.BILDERBACK", "P.LIANG",
+          "M.GLASER", "G.N.PHILLIPS JR.", "T.L.ST. STEVENS"
+         ]
+        )
+        self.assertEqual(self.empty_data_file.authors, [])
+
 
 
 if __name__ == "__main__":

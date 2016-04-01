@@ -16,6 +16,7 @@ class PdbDataFile:
         self.process_expdta()
         self.process_nummdl()
         self.process_mdltyp()
+        self.process_author()
 
 
     def __repr__(self):
@@ -121,3 +122,8 @@ class PdbDataFile:
         self.model_annotations = [
          ann.strip() for ann in mdltyp_text.split(";") if ann.strip()
         ]
+
+
+    def process_author(self):
+        authors = self.pdb_file.get_records_by_name("AUTHOR")
+        self.authors = self.merge_records(authors, 10).split(",") if authors else []
