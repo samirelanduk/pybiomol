@@ -189,6 +189,19 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.revisions, [])
 
 
+    def test_sprsde(self):
+        self.assertEqual(
+         self.data_file.supercedes,
+         ["1LH4", "2LH4"]
+        )
+        self.assertEqual(self.empty_data_file.supercedes, [])
+        self.assertEqual(
+         self.data_file.supercede_date,
+         datetime.datetime(1995, 2, 27).date()
+        )
+        self.assertEqual(self.empty_data_file.supercede_date, None)
+
+
 
 if __name__ == "__main__":
     unittest.main()

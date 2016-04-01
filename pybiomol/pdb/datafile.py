@@ -18,6 +18,7 @@ class PdbDataFile:
         self.process_mdltyp()
         self.process_author()
         self.process_revdat()
+        self.process_sprsde()
 
 
     def __repr__(self):
@@ -145,3 +146,9 @@ class PdbDataFile:
              "type": int(records[0][31]),
              "records": [r for r in rec_types if r]
             })
+
+
+    def process_sprsde(self):
+        sprsde = self.pdb_file.get_record_by_name("SPRSDE")
+        self.supercedes = sprsde[31:75].split() if sprsde else []
+        self.supercede_date = self.date_from_string(sprsde[11:20]) if sprsde else None
