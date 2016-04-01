@@ -226,6 +226,31 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.journal, None)
 
 
+    def test_remark(self):
+        self.maxDiff = None
+        self.assertEqual(
+         self.data_file.remarks,
+         [
+          {
+           "number": 2,
+           "content": "RESOLUTION.    1.90 ANGSTROMS."
+          }, {
+           "number": 4,
+           "content": "1LOL COMPLIES WITH FORMAT V. 3.15, 01-DEC-08"
+          }, {
+           "number": 999,
+           "content": "SEQUENCE\n"
+            "AUTHOR STATES THAT ALTHOUGH RESIDUES 1 AND 1001 ARE MET\n"
+            "AND RESIDUES 101 AND 1101 ARE ARG ACCORDING TO THE\n"
+            "SWISSPROT ENTRY, RESIDUES 1 AND 1001 WERE LEU AND RESIDUES\n"
+            "101 AND 1101 WERE PRO IN THE ORIGINAL CONSTRUCT CLONED\n"
+            "OF MT GENOMIC DNA."
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.remarks, [])
+
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -20,6 +20,7 @@ class PdbDataFile:
         self.process_revdat()
         self.process_sprsde()
         self.process_jrnl()
+        self.process_remark()
 
 
     def __repr__(self):
@@ -193,3 +194,16 @@ class PdbDataFile:
             self.journal["pubmed"] = pmids[0][19:79] if pmids else None
             dois = [r for r in jrnls if r[12:16] == "DOI"]
             self.journal["doi"] = dois[0][19:79] if dois else None
+
+
+    def process_remark(self):
+        remarks = self.pdb_file.get_records_by_name("REMARK")
+        remark_numbers = sorted(list(set([int(r[7:10]) for r in remarks])))
+        self.remarks = []
+        for number in remark_numbers:
+            recs = [r for r in remarks if int(r[7:10]) == number]
+            remark = {
+             "number": number,
+             "content": self.merge_records(recs[1:], 11, join="\n", dont_condense=" ,:;")
+            }
+            self.remarks.append(remark)
