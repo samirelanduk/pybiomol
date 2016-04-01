@@ -17,14 +17,21 @@ class PdbDataFile:
         self.process_nummdl()
         self.process_mdltyp()
         self.process_author()
+        self.process_revdat()
 
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
 
 
+    def date_from_string(self, s):
+        return datetime.datetime.strptime(
+         s, "%d-%b-%y"
+        ).date()
+
+
     def merge_records(self, records, start, join=" ", dont_condense=""):
-        string = join.join([r[start:] for r in records])
+        string = join.join([r[start:] if r[start:] else "" for r in records])
         condense = [char for char in " ;:," if char not in dont_condense]
         for char in condense:
             string = string.replace(char + " ", char)
@@ -56,19 +63,15 @@ class PdbDataFile:
 
     def process_header(self):
         header = self.pdb_file.get_record_by_name("HEADER")
-        self.classification = header[10:50].strip() if header else None
-        self.deposition_date = datetime.datetime.strptime(
-         header[50:59], "%d-%b-%y"
-        ).date() if header else None
+        self.classification = header[10:50] if header else None
+        self.deposition_date = self.date_from_string(header[50:59]) if header else None
         self.pdb_code = header[62:66].strip() if header else None
 
 
     def process_obslte(self):
         obslte = self.pdb_file.get_record_by_name("OBSLTE")
         self.is_obsolete = bool(obslte)
-        self.obsolete_date = datetime.datetime.strptime(
-         obslte[11:20], "%d-%b-%y"
-        ).date() if obslte else None
+        self.obsolete_date = self.date_from_string(obslte[11:20]) if obslte else None
         self.replacement_code = obslte[31:35] if obslte else None
 
 
@@ -127,3 +130,18 @@ class PdbDataFile:
     def process_author(self):
         authors = self.pdb_file.get_records_by_name("AUTHOR")
         self.authors = self.merge_records(authors, 10).split(",") if authors else []
+
+
+    def process_revdat(self):
+        revdats = self.pdb_file.get_records_by_name("REVDAT")
+        numbers = sorted(list(set([int(r[7:10]) for r in revdats])))
+        self.revisions = []
+        for number in numbers:
+            records = [r for r in revdats if int(r[7:10]) == number]
+            rec_types = self.merge_records(records, 39).split()
+            self.revisions.append({
+             "number": number,
+             "date": self.date_from_string(records[0][13:22]),
+             "type": int(records[0][31]),
+             "records": [r for r in rec_types if r]
+            })

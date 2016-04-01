@@ -167,6 +167,28 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.authors, [])
 
 
+    def test_revdat(self):
+        self.assertEqual(
+         self.data_file.revisions,
+         [
+          {
+           "number": 1, "date": datetime.datetime(2002, 8, 7).date(),
+           "type": 0, "records": []
+          }, {
+           "number": 2, "date": datetime.datetime(2002, 8, 14).date(),
+           "type": 1, "records": ["DBREF"]
+          }, {
+           "number": 3, "date": datetime.datetime(2003, 4, 1).date(),
+           "type": 1, "records": ["JRNL"]
+          }, {
+           "number": 4, "date": datetime.datetime(2009, 2, 24).date(),
+           "type": 1, "records": ["VERSN", "COMPND", "EXPDTA", "CAVEAT", "SOURCE", "JRNL"]
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.revisions, [])
+
+
 
 if __name__ == "__main__":
     unittest.main()
