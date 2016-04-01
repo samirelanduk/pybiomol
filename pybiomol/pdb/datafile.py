@@ -19,6 +19,7 @@ class PdbDataFile:
         self.process_author()
         self.process_revdat()
         self.process_sprsde()
+        self.process_jrnl()
 
 
     def __repr__(self):
@@ -152,3 +153,43 @@ class PdbDataFile:
         sprsde = self.pdb_file.get_record_by_name("SPRSDE")
         self.supercedes = sprsde[31:75].split() if sprsde else []
         self.supercede_date = self.date_from_string(sprsde[11:20]) if sprsde else None
+
+
+    def process_jrnl(self):
+        jrnls = self.pdb_file.get_records_by_name("JRNL")
+        if not jrnls:
+            self.journal = None
+        else:
+            self.journal = {}
+            auths = [r for r in jrnls if r[12:16] == "AUTH"]
+            self.journal["authors"] = self.merge_records(auths, 19).split(",") if auths else []
+            titls = [r for r in jrnls if r[12:16] == "TITL"]
+            self.journal["title"] = self.merge_records(titls, 19) if titls else None
+            edits = [r for r in jrnls if r[12:16] == "EDIT"]
+            self.journal["editors"] = self.merge_records(auths, 19).split(",") if edits else []
+            refs = [r for r in jrnls if r[12:16] == "REF"]
+            self.journal["reference"] = {}
+            if refs and "TO BE PUBLISHED" in refs[0]:
+                self.reference = {
+                 "published": False, "publication": None,
+                 "volume": None, "page": None, "year": None
+                }
+            elif refs:
+                self.journal["reference"] = {
+                 "published": True,
+                 "publication": refs[0][19:47],
+                 "volume": int(refs[0][51:55]),
+                 "page": int(refs[0][56:61]),
+                 "year": int(refs[0][62:66])
+                }
+            publs = [r for r in jrnls if r[12:16] == "PUBL"]
+            self.journal["publisher"] = self.merge_records(publs, 19, dont_condense=",:;") if publs else None
+            refns = [r for r in jrnls if r[12:16] == "REFN"]
+            self.journal["reference_number"] = {
+             "type": refns[0][35:39],
+             "value": refns[0][40:65]
+            } if refns else {}
+            pmids = [r for r in jrnls if r[12:16] == "PMID"]
+            self.journal["pubmed"] = pmids[0][19:79] if pmids else None
+            dois = [r for r in jrnls if r[12:16] == "DOI"]
+            self.journal["doi"] = dois[0][19:79] if dois else None

@@ -202,6 +202,30 @@ class TitleSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.supercede_date, None)
 
 
+    def test_jrnl(self):
+        self.assertEqual(
+         self.data_file.journal,
+         {
+          "authors": [
+           "J.REN", "C.NICHOLS", "L.BIRD", "P.CHAMBERLAIN", "K.WEAVER",
+           "S.SHORT", "D.I.STUART", "D.K.STAMMERS"
+          ],
+          "title": "CRYSTAL STRUCTURES OF INHIBITOR COMPLEXES REVEAL AN ALTERNA"
+          "TE BINDING MODE IN OROTIDINE-5'-MONOPHOSPHATE DECARBOXYLASE.",
+          "editors": [
+           "J.REN", "C.NICHOLS", "L.BIRD", "P.CHAMBERLAIN", "K.WEAVER",
+           "S.SHORT", "D.I.STUART", "D.K.STAMMERS"
+          ],
+          "reference": {"published": True, "publication": "SCIENCE", "volume": 282, "page": 2088, "year": 1998},
+          "publisher": "AMERICAN ASSOCIATION FOR THE ADVANCEMENT OF SCIENCE WASHINGTON, D.C.",
+          "reference_number": {"type": "ISSN", "value": "0036-8075"},
+          "pubmed": "12011084",
+          "doi": "10.1074/JBC.M202362200"
+         }
+        )
+        self.assertEqual(self.empty_data_file.journal, None)
+
+
 
 if __name__ == "__main__":
     unittest.main()
