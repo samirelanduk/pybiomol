@@ -252,5 +252,63 @@ class TitleSectionTest(unittest.TestCase):
 
 
 
+class PrimaryStructureSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/primary_structure_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_dbref(self):
+        self.assertEqual(
+         self.data_file.dbreferences,
+         [
+          {
+           "chain": "A",
+           "sequence_begin": 1,
+           "insert_begin": None,
+           "sequence_end": 229,
+           "insert_end": None,
+           "database": "UNP",
+           "accession": "O26232",
+           "db_id": "PYRF_METTH",
+           "db_sequence_begin": 1,
+           "db_insert_begin": None,
+           "db_sequence_end": 228,
+           "db_insert_end": None
+          }, {
+           "chain": "B",
+           "sequence_begin": 1001,
+           "insert_begin": None,
+           "sequence_end": 1229,
+           "insert_end": None,
+           "database": "UNP",
+           "accession": "O26232",
+           "db_id": "PYRF_METTH",
+           "db_sequence_begin": 1,
+           "db_insert_begin": None,
+           "db_sequence_end": 228,
+           "db_insert_end": None
+          }, {
+           "chain": "C",
+           "sequence_begin": 61,
+           "insert_begin": None,
+           "sequence_end": 322,
+           "insert_end": None,
+           "database": "GB",
+           "accession": "46197919",
+           "db_id": "AE017221",
+           "db_sequence_begin": 1534489,
+           "db_insert_begin": None,
+           "db_sequence_end": 1537377,
+           "db_insert_end": None
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.dbreferences, [])
+
+
 if __name__ == "__main__":
     unittest.main()

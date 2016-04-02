@@ -22,6 +22,8 @@ class PdbDataFile:
         self.process_jrnl()
         self.process_remark()
 
+        self.process_dbref()
+
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -207,3 +209,39 @@ class PdbDataFile:
              "content": self.merge_records(recs[1:], 11, join="\n", dont_condense=" ,:;")
             }
             self.remarks.append(remark)
+
+
+    def process_dbref(self):
+        dbrefs = self.pdb_file.get_records_by_name("DBREF")
+        self.dbreferences = [{
+         "chain": r[12],
+         "sequence_begin": int(r[14:18]),
+         "insert_begin": r[18],
+         "sequence_end": int(r[20:24]),
+         "insert_end": r[24],
+         "database": r[26:32],
+         "accession": r[33:40],
+         "db_id": r[42:54],
+         "db_sequence_begin": int(r[55:60]),
+         "db_insert_begin": r[60],
+         "db_sequence_end": int(r[62:67]),
+         "db_insert_end": r[67]
+        } for r in dbrefs]
+        dbref1s = self.pdb_file.get_records_by_name("DBREF1")
+        dbref2s = self.pdb_file.get_records_by_name("DBREF2")
+        ref_pairs = zip(dbref1s, dbref2s)
+        self.dbreferences += [{
+         "chain": pair[0][12],
+         "sequence_begin": int(pair[0][14:18]),
+         "insert_begin": pair[0][18],
+         "sequence_end": int(pair[0][20:24]),
+         "insert_end": pair[0][24],
+         "database": pair[0][26:32],
+         "accession": pair[1][18:40],
+         "db_id": pair[0][47:67],
+         "db_sequence_begin": int(pair[1][45:55]),
+         "db_insert_begin": None,
+         "db_sequence_end": int(pair[1][57:67]),
+         "db_insert_end": None
+        } for pair in ref_pairs]
+        self.dbreferences = sorted(self.dbreferences, key=lambda k: k["chain"])
