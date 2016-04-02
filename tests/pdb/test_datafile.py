@@ -339,5 +339,27 @@ class PrimaryStructureSectionTest(unittest.TestCase):
         )
         self.assertEqual(self.empty_data_file.sequence_differences, [])
 
+
+    def test_seqres(self):
+        self.assertEqual(
+         self.data_file.residue_sequences,
+         [
+          {
+           "chain": "A",
+           "length": 229,
+           "residues": [
+            "LEU", "ARG", "SER", "ARG", "ARG", "VAL", "ASP", "VAL",
+            "MET", "ASP", "VAL", "MET", "ASN", "ARG", "LEU", "CYS"
+            ]
+          }, {
+           "chain": "B",
+           "length": 229,
+           "residues": [
+            "LEU", "ARG", "SER", "ARG", "ARG", "VAL", "ASP", "VAL",
+            "MET", "ASP", "VAL", "MET", "ASN", "ARG", "LEU", "CYS"
+            ]
+          }
+         ]
+        )
 if __name__ == "__main__":
     unittest.main()

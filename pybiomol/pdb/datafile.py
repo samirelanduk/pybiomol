@@ -24,6 +24,7 @@ class PdbDataFile:
 
         self.process_dbref()
         self.process_seqadv()
+        self.process_seqres()
 
 
     def __repr__(self):
@@ -261,3 +262,16 @@ class PdbDataFile:
          "db_residue_number": int(r[43:48]) if r[43:48] else None,
          "conflict": r[49:70]
         } for r in seqadvs]
+
+
+    def process_seqres(self):
+        seqres = self.pdb_file.get_records_by_name("SEQRES")
+        chains = sorted(list(set([r[11] for r in seqres])))
+        self.residue_sequences = []
+        for chain in chains:
+            records = [r for r in seqres if r[11] == chain]
+            self.residue_sequences.append({
+             "chain": chain,
+             "length": int(records[0][13:17]),
+             "residues": self.merge_records(records, 19).split()
+            })
