@@ -310,5 +310,34 @@ class PrimaryStructureSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.dbreferences, [])
 
 
+    def test_seqadv(self):
+        self.assertEqual(
+         self.data_file.sequence_differences,
+         [
+          {
+           "residue_name": "GLU",
+           "chain": "A",
+           "residue_number": 229,
+           "insert_code": None,
+           "database": "UNP",
+           "accession": "O26232",
+           "db_residue_name": None,
+           "db_residue_number": None,
+           "conflict": "INSERTION"
+          }, {
+           "residue_name": "GLU",
+           "chain": "B",
+           "residue_number": 1229,
+           "insert_code": None,
+           "database": "UNP",
+           "accession": "O26232",
+           "db_residue_name": None,
+           "db_residue_number": None,
+           "conflict": "INSERTION"
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.sequence_differences, [])
+
 if __name__ == "__main__":
     unittest.main()

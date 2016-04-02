@@ -23,6 +23,7 @@ class PdbDataFile:
         self.process_remark()
 
         self.process_dbref()
+        self.process_seqadv()
 
 
     def __repr__(self):
@@ -245,3 +246,18 @@ class PdbDataFile:
          "db_insert_end": None
         } for pair in ref_pairs]
         self.dbreferences = sorted(self.dbreferences, key=lambda k: k["chain"])
+
+
+    def process_seqadv(self):
+        seqadvs = self.pdb_file.get_records_by_name("SEQADV")
+        self.sequence_differences = [{
+         "residue_name": r[12:15],
+         "chain": r[16],
+         "residue_number": int(r[18:22]) if r[18:22] else None,
+         "insert_code": r[22],
+         "database": r[24:28],
+         "accession": r[29:38],
+         "db_residue_name": r[39:42],
+         "db_residue_number": int(r[43:48]) if r[43:48] else None,
+         "conflict": r[49:70]
+        } for r in seqadvs]
