@@ -1,0 +1,4 @@
+HELIX    1   1 ASP A   61  ASP A   69  1                                   9
+HELIX    2   2 ASP A   69  VAL A   75  1                                   7
+SHEET    1   A 2 VAL A 124  LEU A 125  0
+SHEET    2   A 2 CYS A 150  VAL A 151 -1  O  CYS A 150   N  LEU A 125

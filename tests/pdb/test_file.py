@@ -83,7 +83,7 @@ class RecordTests(unittest.TestCase):
         self.assertEqual(record[0], "T")
         self.assertEqual(record[70], None)
         self.assertEqual(record[7:10], "123")
-        self.assertEqual(record[6:11], " 123")
+        self.assertEqual(record[6:11], "123")
         self.assertEqual(record[4:7], None)
 
 

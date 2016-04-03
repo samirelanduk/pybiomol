@@ -32,6 +32,7 @@ class PdbDataFile:
         self.process_hetsyn()
         self.process_formul()
 
+        self.process_helix()
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -44,7 +45,7 @@ class PdbDataFile:
 
 
     def merge_records(self, records, start, join=" ", dont_condense=""):
-        string = join.join([r[start:] if r[start:] else "" for r in records])
+        string = join.join([r.text[start:].rstrip() if r.text[start:].rstrip() else "" for r in records])
         condense = [char for char in " ;:,-" if char not in dont_condense]
         for char in condense:
             string = string.replace(char + " ", char)
@@ -258,13 +259,13 @@ class PdbDataFile:
     def process_seqadv(self):
         seqadvs = self.pdb_file.get_records_by_name("SEQADV")
         self.sequence_differences = [{
-         "residue_name": r[12:15].lstrip() if r[12:15] else None,
+         "residue_name": r[12:15],
          "chain": r[16],
          "residue_number": int(r[18:22]) if r[18:22] else None,
          "insert_code": r[22],
          "database": r[24:28],
          "accession": r[29:38],
-         "db_residue_name": r[39:42].lstrip() if r[39:42] else None,
+         "db_residue_name": r[39:42],
          "db_residue_number": int(r[43:48]) if r[43:48] else None,
          "conflict": r[49:70]
         } for r in seqadvs]
@@ -286,11 +287,11 @@ class PdbDataFile:
     def process_modres(self):
         modres = self.pdb_file.get_records_by_name("MODRES")
         self.modifies_residues = [{
-         "residue_name": r[12:15].lstrip() if r[12:15] else None,
+         "residue_name": r[12:15],
          "chain": r[16],
          "residue_number": int(r[18:22]),
          "insert_code": r[22],
-         "standard_resisdue_name": r[24:27].lstrip() if r[24:27] else None,
+         "standard_resisdue_name": r[24:27],
          "comment": r[29:70]
         } for r in modres]
 
@@ -298,7 +299,7 @@ class PdbDataFile:
     def process_het(self):
         hets = self.pdb_file.get_records_by_name("HET")
         self.hets = [{
-         "het_id": r[7:10].lstrip() if r[7:10] else None,
+         "het_id": r[7:10] if r[7:10] else None,
          "chain": r[12],
          "het_number": int(r[13:17]),
          "insert_code": r[17],
@@ -311,7 +312,7 @@ class PdbDataFile:
         hetnams = self.pdb_file.get_records_by_name("HETNAM")
         ids = list(set([r[11:14] for r in hetnams]))
         self.het_names = {
-         het_id.lstrip(): self.merge_records(
+         het_id: self.merge_records(
           [r for r in hetnams if r[11:14] == het_id], 15, dont_condense=":;"
          ) for het_id in ids
         }
@@ -321,16 +322,17 @@ class PdbDataFile:
         hetsyns = self.pdb_file.get_records_by_name("HETSYN")
         ids = list(set([r[11:14] for r in hetsyns]))
         self.het_synonyms = {
-         het_id.lstrip(): self.merge_records(
+         het_id: self.merge_records(
           [r for r in hetsyns if r[11:14] == het_id], 15
          ).split(";") for het_id in ids
         }
+
 
     def process_formul(self):
         formuls = self.pdb_file.get_records_by_name("FORMUL")
         ids = list(set([r[12:15] for r in formuls]))
         self.het_formulae = {
-         het_id.lstrip(): {
+         het_id: {
           "component_number": int([r for r in formuls if r[12:15] == het_id][0][8:10]),
           "is_water": [r for r in formuls if r[12:15] == het_id][0][18] == "*",
           "formula": self.merge_records(
@@ -338,3 +340,22 @@ class PdbDataFile:
           )
          } for het_id in ids
         }
+
+
+    def process_helix(self):
+        helix = self.pdb_file.get_records_by_name("HELIX")
+        self.helices = [{
+         "helix_number": int(r[7:10]) if r[7:10] else None,
+         "helix_name": r[11:14],
+         "start_residue_name": r[15:18],
+         "start_residue_chain": r[19],
+         "start_residue_number": int(r[21:25]) if r[21:25] else None,
+         "start_residue_insert": r[25],
+         "end_residue_name": r[27:30],
+         "end_residue_chain": r[31],
+         "end_residue_number": int(r[33:37]) if r[33:37] else None,
+         "end_residue_insert": r[37],
+         "helix_class": int(r[38:40]) if r[38:40] else None,
+         "comment": r[40:70],
+         "length": int(r[71:76]) if r[71:76] else None
+        } for r in helix]

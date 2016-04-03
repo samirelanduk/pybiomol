@@ -45,4 +45,4 @@ class PdbRecord:
 
 
     def __getitem__(self, key):
-        return self.text[key].rstrip() if self.text[key].rstrip() else None
+        return self.text[key].strip() if self.text[key].strip() else None

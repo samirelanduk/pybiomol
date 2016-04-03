@@ -482,5 +482,55 @@ class HeterogenSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.het_formulae, {})
 
 
+class SecondaryStructureSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/secondary_structure_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_helix(self):
+        self.assertEqual(
+         self.data_file.helices,
+         [
+          {
+           "helix_number": 1,
+           "helix_name": "1",
+           "start_residue_name": "ASP",
+           "start_residue_chain": "A",
+           "start_residue_number": 61,
+           "start_residue_insert": None,
+           "end_residue_name": "ASP",
+           "end_residue_chain": "A",
+           "end_residue_number": 69,
+           "end_residue_insert": None,
+           "helix_class": 1,
+           "comment": None,
+           "length": 9
+          }, {
+           "helix_number": 2,
+           "helix_name": "2",
+           "start_residue_name": "ASP",
+           "start_residue_chain": "A",
+           "start_residue_number": 69,
+           "start_residue_insert": None,
+           "end_residue_name": "VAL",
+           "end_residue_chain": "A",
+           "end_residue_number": 75,
+           "end_residue_insert": None,
+           "helix_class": 1,
+           "comment": None,
+           "length": 7
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.helices, [])
+
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
