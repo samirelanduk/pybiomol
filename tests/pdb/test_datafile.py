@@ -361,5 +361,32 @@ class PrimaryStructureSectionTest(unittest.TestCase):
           }
          ]
         )
+        self.assertEqual(self.empty_data_file.residue_sequences, [])
+
+
+    def test_modres(self):
+        self.assertEqual(
+         self.data_file.modifies_residues,
+         [
+          {
+           "residue_name": "ASN",
+           "chain": "A",
+           "residue_number": 74,
+           "insert_code": None,
+           "standard_resisdue_name": 'ASN',
+           "comment": "GLYCOSYLATION SITE"
+          }, {
+           "residue_name": "1MG",
+           "chain": "D",
+           "residue_number": 1937,
+           "insert_code": None,
+           "standard_resisdue_name": 'G',
+           "comment": "1N-METHYLGUANOSINE-5'-MONOPHOSPHATE"
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.modifies_residues, [])
+
+
 if __name__ == "__main__":
     unittest.main()

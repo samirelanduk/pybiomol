@@ -25,6 +25,7 @@ class PdbDataFile:
         self.process_dbref()
         self.process_seqadv()
         self.process_seqres()
+        self.process_modres()
 
 
     def __repr__(self):
@@ -275,3 +276,15 @@ class PdbDataFile:
              "length": int(records[0][13:17]),
              "residues": self.merge_records(records, 19).split()
             })
+
+
+    def process_modres(self):
+        modres = self.pdb_file.get_records_by_name("MODRES")
+        self.modifies_residues = [{
+         "residue_name": r[12:15],
+         "chain": r[16],
+         "residue_number": int(r[18:22]),
+         "insert_code": r[22],
+         "standard_resisdue_name": r[24:27],
+         "comment": r[29:70]
+        } for r in modres]
