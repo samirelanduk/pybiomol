@@ -529,6 +529,60 @@ class SecondaryStructureSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.helices, [])
 
 
+    def test_sheet(self):
+        self.assertEqual(
+         self.data_file.sheets,
+         [
+          {
+           "sheet": "A",
+           "strand_count": 2,
+           "strands": [{
+            "strand_number": 1,
+            "start_residue_name": "VAL",
+            "start_residue_chain": "A",
+            "start_residue_number": 124,
+            "start_residue_insert": None,
+            "end_residue_name": "LEU",
+            "end_residue_chain": "A",
+            "end_residue_number": 125,
+            "end_residue_insert": None,
+            "sense": 0,
+            "current_atom": None,
+            "current_residue_name": None,
+            "current_chain": None,
+            "current_residue_number": None,
+            "current_insert": None,
+            "previous_atom": None,
+            "previous_residue_name": None,
+            "previous_chain": None,
+            "previous_residue_number": None,
+            "previous_insert": None
+           }, {
+            "strand_number": 2,
+            "start_residue_name": "CYS",
+            "start_residue_chain": "A",
+            "start_residue_number": 150,
+            "start_residue_insert": None,
+            "end_residue_name": "VAL",
+            "end_residue_chain": "A",
+            "end_residue_number": 151,
+            "end_residue_insert": None,
+            "sense": -1,
+            "current_atom": "O",
+            "current_residue_name": "CYS",
+            "current_chain": "A",
+            "current_residue_number": 150,
+            "current_insert": None,
+            "previous_atom": "N",
+            "previous_residue_name": "LEU",
+            "previous_chain": "A",
+            "previous_residue_number": 125,
+            "previous_insert": None
+           }]
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.sheets, [])
 
 
 

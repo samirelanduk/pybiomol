@@ -33,6 +33,8 @@ class PdbDataFile:
         self.process_formul()
 
         self.process_helix()
+        self.process_sheet()
+
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -359,3 +361,37 @@ class PdbDataFile:
          "comment": r[40:70],
          "length": int(r[71:76]) if r[71:76] else None
         } for r in helix]
+
+
+    def process_sheet(self):
+        sheets = self.pdb_file.get_records_by_name("SHEET")
+        sheet_names = sorted(list(set([r[11:14] for r in sheets])))
+        self.sheets = []
+        for sheet_name in sheet_names:
+            strands = [r for r in sheets if r[11:14] == sheet_name]
+            self.sheets.append({
+             "sheet": sheet_name,
+             "strand_count": int(strands[0][14:16]) if strands[0][14:16] else None,
+             "strands": [{
+              "strand_number": int(r[7:10]) if r[7:10] else None,
+              "start_residue_name": r[17:20],
+              "start_residue_chain": r[21],
+              "start_residue_number": int(r[22:26]) if r[22:26] else None,
+              "start_residue_insert": r[26],
+              "end_residue_name": r[28:31],
+              "end_residue_chain": r[32],
+              "end_residue_number": int(r[33:37]) if r[33:37] else None,
+              "end_residue_insert": r[37],
+              "sense": int(r[38:40]) if r[38:40] else None,
+              "current_atom": r[41:45],
+              "current_residue_name": r[45:48],
+              "current_chain": r[49],
+              "current_residue_number": int(r[50:54]) if r[50:54] else None,
+              "current_insert": r[54],
+              "previous_atom": r[56:60],
+              "previous_residue_name": r[60:63],
+              "previous_chain": r[64],
+              "previous_residue_number": int(r[65:69]) if r[65:69] else None,
+              "previous_insert": r[69]
+             } for r in strands]
+            })
