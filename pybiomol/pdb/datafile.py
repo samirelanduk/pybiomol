@@ -29,6 +29,8 @@ class PdbDataFile:
 
         self.process_het()
         self.process_hetnam()
+        self.process_hetsyn()
+        self.process_formul()
 
 
     def __repr__(self):
@@ -312,4 +314,27 @@ class PdbDataFile:
          het_id.lstrip(): self.merge_records(
           [r for r in hetnams if r[11:14] == het_id], 15, dont_condense=":;"
          ) for het_id in ids
+        }
+
+
+    def process_hetsyn(self):
+        hetsyns = self.pdb_file.get_records_by_name("HETSYN")
+        ids = list(set([r[11:14] for r in hetsyns]))
+        self.het_synonyms = {
+         het_id.lstrip(): self.merge_records(
+          [r for r in hetsyns if r[11:14] == het_id], 15
+         ).split(";") for het_id in ids
+        }
+
+    def process_formul(self):
+        formuls = self.pdb_file.get_records_by_name("FORMUL")
+        ids = list(set([r[12:15] for r in formuls]))
+        self.het_formulae = {
+         het_id.lstrip(): {
+          "component_number": int([r for r in formuls if r[12:15] == het_id][0][8:10]),
+          "is_water": [r for r in formuls if r[12:15] == het_id][0][18] == "*",
+          "formula": self.merge_records(
+           [r for r in formuls if r[12:15] == het_id], 19
+          )
+         } for het_id in ids
         }

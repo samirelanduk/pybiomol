@@ -444,14 +444,43 @@ class HeterogenSectionTest(unittest.TestCase):
 
 
     def test_hetnam(self):
-        print(self.data_file.het_names)
         self.assertEqual(
          self.data_file.het_names,
          {
           "K": "POTASSIUM ION",
-          "PIO": "(1R)-1,4-ANHYDRO-2-DEOXY-1-(6-METHYL-2,4-DIOXO-1,2,3,4-TETRAHYDROQUINAZOLIN-8-YL)-5-O-PHOSPHONO-D-ERYTHRO-PENTITOL"
+          "PIO": "(1R)-1,4-ANHYDRO-2-DEOXY-1-(6-METHYL-2,4-DIOXO-1,2,3,4-TETRAH"
+          "YDROQUINAZOLIN-8-YL)-5-O-PHOSPHONO-D-ERYTHRO-PENTITOL"
          }
         )
         self.assertEqual(self.empty_data_file.het_names, {})
+
+
+    def test_hetsyn(self):
+        self.assertEqual(
+         self.data_file.het_synonyms,
+         {
+          "K": ["BOOM BOOM BOMB"],
+          "PIO": [
+           "L-ALPHA-PHOSPHATIDYL-D-MYO-INOSITOL 4,5-DIPHOSPHATE,DIOCTANOYL",
+           "L-ALPHA-PHOSPHATIDYLINOSITOL 4,5-DIPHOSPHATE SODIUM SALT",
+           "PIP2",
+           "1,2-DIACYL-SN-GLYCERO-3-PHOSPHO-(1-D-MYO-INOSITOL4,5-BISPHOSPHATE)",
+           "TRIPHOSPHOINOSITIDE"
+          ]
+         }
+        )
+        self.assertEqual(self.empty_data_file.het_synonyms, {})
+
+
+    def test_formul(self):
+        self.assertEqual(
+         self.data_file.het_formulae,
+         {
+          "K": {"component_number": 2, "is_water": False, "formula": "4(K 1+)"}
+         }
+        )
+        self.assertEqual(self.empty_data_file.het_formulae, {})
+
+
 if __name__ == "__main__":
     unittest.main()
