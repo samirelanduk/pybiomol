@@ -22,10 +22,6 @@ class FileCreation(unittest.TestCase):
             )
 
 
-    def test_can_get_by_file_name(self):
-        pdb = pybiomol.get_pdb_from_file("tests/pdb/pdb_files/basic.pdb")
-
-
     def test_has_records(self):
         with open("tests/pdb/pdb_files/basic.pdb") as f:
             pdb = PdbFile(f.read())
@@ -62,17 +58,6 @@ class FileCreation(unittest.TestCase):
                 self.assertIsInstance(record, PdbRecord)
 
 
-    def test_can_get_by_file_remotely(self):
-        pdb = pybiomol.get_pdb_remotely("1LOL")
-
-
-    def test_invalid_pdb_codes(self):
-        self.assertRaises(
-         pybiomol.InvalidPdbCode,
-         lambda: pybiomol.get_pdb_remotely("1LOLZ")
-        )
-
-
 
 class RecordTests(unittest.TestCase):
 
@@ -98,8 +83,9 @@ class RecordTests(unittest.TestCase):
         self.assertEqual(record[0], "T")
         self.assertEqual(record[70], None)
         self.assertEqual(record[7:10], "123")
-        self.assertEqual(record[6:11], "123")
+        self.assertEqual(record[6:11], " 123")
         self.assertEqual(record[4:7], None)
+
 
 
 if __name__ == "__main__":

@@ -27,6 +27,9 @@ class PdbDataFile:
         self.process_seqres()
         self.process_modres()
 
+        self.process_het()
+        self.process_hetnam()
+
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -40,7 +43,7 @@ class PdbDataFile:
 
     def merge_records(self, records, start, join=" ", dont_condense=""):
         string = join.join([r[start:] if r[start:] else "" for r in records])
-        condense = [char for char in " ;:," if char not in dont_condense]
+        condense = [char for char in " ;:,-" if char not in dont_condense]
         for char in condense:
             string = string.replace(char + " ", char)
         return string
@@ -253,13 +256,13 @@ class PdbDataFile:
     def process_seqadv(self):
         seqadvs = self.pdb_file.get_records_by_name("SEQADV")
         self.sequence_differences = [{
-         "residue_name": r[12:15],
+         "residue_name": r[12:15].lstrip() if r[12:15] else None,
          "chain": r[16],
          "residue_number": int(r[18:22]) if r[18:22] else None,
          "insert_code": r[22],
          "database": r[24:28],
          "accession": r[29:38],
-         "db_residue_name": r[39:42],
+         "db_residue_name": r[39:42].lstrip() if r[39:42] else None,
          "db_residue_number": int(r[43:48]) if r[43:48] else None,
          "conflict": r[49:70]
         } for r in seqadvs]
@@ -281,10 +284,32 @@ class PdbDataFile:
     def process_modres(self):
         modres = self.pdb_file.get_records_by_name("MODRES")
         self.modifies_residues = [{
-         "residue_name": r[12:15],
+         "residue_name": r[12:15].lstrip() if r[12:15] else None,
          "chain": r[16],
          "residue_number": int(r[18:22]),
          "insert_code": r[22],
-         "standard_resisdue_name": r[24:27],
+         "standard_resisdue_name": r[24:27].lstrip() if r[24:27] else None,
          "comment": r[29:70]
         } for r in modres]
+
+
+    def process_het(self):
+        hets = self.pdb_file.get_records_by_name("HET")
+        self.hets = [{
+         "het_id": r[7:10].lstrip() if r[7:10] else None,
+         "chain": r[12],
+         "het_number": int(r[13:17]),
+         "insert_code": r[17],
+         "atom_num": int(r[20:25]),
+         "description": r[30:70]
+        } for r in hets]
+
+
+    def process_hetnam(self):
+        hetnams = self.pdb_file.get_records_by_name("HETNAM")
+        ids = list(set([r[11:14] for r in hetnams]))
+        self.het_names = {
+         het_id.lstrip(): self.merge_records(
+          [r for r in hetnams if r[11:14] == het_id], 15, dont_condense=":;"
+         ) for het_id in ids
+        }

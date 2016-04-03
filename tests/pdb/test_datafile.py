@@ -239,7 +239,7 @@ class TitleSectionTest(unittest.TestCase):
            "content": "1LOL COMPLIES WITH FORMAT V. 3.15, 01-DEC-08"
           }, {
            "number": 999,
-           "content": "SEQUENCE\n"
+           "content": " SEQUENCE\n"
             "AUTHOR STATES THAT ALTHOUGH RESIDUES 1 AND 1001 ARE MET\n"
             "AND RESIDUES 101 AND 1101 ARE ARG ACCORDING TO THE\n"
             "SWISSPROT ENTRY, RESIDUES 1 AND 1001 WERE LEU AND RESIDUES\n"
@@ -388,5 +388,70 @@ class PrimaryStructureSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.modifies_residues, [])
 
 
+
+class HeterogenSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/heterogen_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_het(self):
+        self.assertEqual(
+         self.data_file.hets,
+         [
+          {
+           "het_id": "K",
+           "chain": "A",
+           "het_number": 501,
+           "insert_code": None,
+           "atom_num": 1,
+           "description": None
+          }, {
+           "het_id": "K",
+           "chain": "A",
+           "het_number": 502,
+           "insert_code": None,
+           "atom_num": 1,
+           "description": None
+          }, {
+           "het_id": "K",
+           "chain": "A",
+           "het_number": 503,
+           "insert_code": None,
+           "atom_num": 1,
+           "description": None
+          }, {
+           "het_id": "K",
+           "chain": "A",
+           "het_number": 504,
+           "insert_code": None,
+           "atom_num": 1,
+           "description": None
+          }, {
+           "het_id": "PIO",
+           "chain": "A",
+           "het_number": 400,
+           "insert_code": None,
+           "atom_num": 40,
+           "description": None
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.hets, [])
+
+
+    def test_hetnam(self):
+        print(self.data_file.het_names)
+        self.assertEqual(
+         self.data_file.het_names,
+         {
+          "K": "POTASSIUM ION",
+          "PIO": "(1R)-1,4-ANHYDRO-2-DEOXY-1-(6-METHYL-2,4-DIOXO-1,2,3,4-TETRAHYDROQUINAZOLIN-8-YL)-5-O-PHOSPHONO-D-ERYTHRO-PENTITOL"
+         }
+        )
+        self.assertEqual(self.empty_data_file.het_names, {})
 if __name__ == "__main__":
     unittest.main()
