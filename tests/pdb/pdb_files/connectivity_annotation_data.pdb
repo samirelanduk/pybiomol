@@ -1,4 +1,4 @@
 SSBOND   1 CYS A  123    CYS A  155                          1555   1555  2.04
 LINK         O   TYR A 146                 K     K A 501     1555   1555  2.75
-LINK         OG1 THR A 143                 K     K A 504     1555   1555  2.78
-CISPEP   1 ASP B 1188    PRO B 1189          0         0.35 
+LINK         OG1 THR A 143                 K     K A 504     1555   1555  
+CISPEP     ASP B 1188    PRO B 1189          0         0.35

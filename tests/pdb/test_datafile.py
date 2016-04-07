@@ -651,7 +651,7 @@ class ConnectivityAnnotationSectionTest(unittest.TestCase):
           "insert_code_2": None,
           "symmetry_1": "1555",
           "symmetry_2": "1555",
-          "length": 2.78
+          "length": None
          }]
         )
         self.assertEqual(self.empty_data_file.links, [])
@@ -661,7 +661,7 @@ class ConnectivityAnnotationSectionTest(unittest.TestCase):
         self.assertEqual(
          self.data_file.cis_peptides,
          [{
-          "serial_num": 1,
+          "serial_num": None,
           "residue_name_1": "ASP",
           "chain_1": "B",
           "residue_number_1": 1188,

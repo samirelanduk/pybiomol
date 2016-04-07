@@ -1,5 +1,8 @@
 import datetime
 
+int = lambda k: globals()["__builtins__"]["int"](k) if k else None
+float = lambda k: globals()["__builtins__"]["float"](k) if k else None
+
 class PdbDataFile:
 
     def __init__(self, pdb_file):
@@ -267,12 +270,12 @@ class PdbDataFile:
         self.sequence_differences = [{
          "residue_name": r[12:15],
          "chain": r[16],
-         "residue_number": int(r[18:22]) if r[18:22] else None,
+         "residue_number": int(r[18:22]),
          "insert_code": r[22],
          "database": r[24:28],
          "accession": r[29:38],
          "db_residue_name": r[39:42],
-         "db_residue_number": int(r[43:48]) if r[43:48] else None,
+         "db_residue_number": int(r[43:48]),
          "conflict": r[49:70]
         } for r in seqadvs]
 
@@ -305,7 +308,7 @@ class PdbDataFile:
     def process_het(self):
         hets = self.pdb_file.get_records_by_name("HET")
         self.hets = [{
-         "het_id": r[7:10] if r[7:10] else None,
+         "het_id": r[7:10],
          "chain": r[12],
          "het_number": int(r[13:17]),
          "insert_code": r[17],
@@ -351,19 +354,19 @@ class PdbDataFile:
     def process_helix(self):
         helix = self.pdb_file.get_records_by_name("HELIX")
         self.helices = [{
-         "helix_number": int(r[7:10]) if r[7:10] else None,
+         "helix_number": int(r[7:10]),
          "helix_name": r[11:14],
          "start_residue_name": r[15:18],
          "start_residue_chain": r[19],
-         "start_residue_number": int(r[21:25]) if r[21:25] else None,
+         "start_residue_number": int(r[21:25]),
          "start_residue_insert": r[25],
          "end_residue_name": r[27:30],
          "end_residue_chain": r[31],
-         "end_residue_number": int(r[33:37]) if r[33:37] else None,
+         "end_residue_number": int(r[33:37]),
          "end_residue_insert": r[37],
-         "helix_class": int(r[38:40]) if r[38:40] else None,
+         "helix_class": int(r[38:40]),
          "comment": r[40:70],
-         "length": int(r[71:76]) if r[71:76] else None
+         "length": int(r[71:76])
         } for r in helix]
 
 
@@ -375,27 +378,27 @@ class PdbDataFile:
             strands = [r for r in sheets if r[11:14] == sheet_name]
             self.sheets.append({
              "sheet": sheet_name,
-             "strand_count": int(strands[0][14:16]) if strands[0][14:16] else None,
+             "strand_count": int(strands[0][14:16]),
              "strands": [{
-              "strand_number": int(r[7:10]) if r[7:10] else None,
+              "strand_number": int(r[7:10]),
               "start_residue_name": r[17:20],
               "start_residue_chain": r[21],
-              "start_residue_number": int(r[22:26]) if r[22:26] else None,
+              "start_residue_number": int(r[22:26]),
               "start_residue_insert": r[26],
               "end_residue_name": r[28:31],
               "end_residue_chain": r[32],
-              "end_residue_number": int(r[33:37]) if r[33:37] else None,
+              "end_residue_number": int(r[33:37]),
               "end_residue_insert": r[37],
-              "sense": int(r[38:40]) if r[38:40] else None,
+              "sense": int(r[38:40]),
               "current_atom": r[41:45],
               "current_residue_name": r[45:48],
               "current_chain": r[49],
-              "current_residue_number": int(r[50:54]) if r[50:54] else None,
+              "current_residue_number": int(r[50:54]),
               "current_insert": r[54],
               "previous_atom": r[56:60],
               "previous_residue_name": r[60:63],
               "previous_chain": r[64],
-              "previous_residue_number": int(r[65:69]) if r[65:69] else None,
+              "previous_residue_number": int(r[65:69]),
               "previous_insert": r[69]
              } for r in strands]
             })
@@ -404,18 +407,18 @@ class PdbDataFile:
     def process_ssbond(self):
         ssbonds = self.pdb_file.get_records_by_name("SSBOND")
         self.ss_bonds = [{
-         "serial_num": int(r[7:10]) if r[7:10] else None,
+         "serial_num": int(r[7:10]),
          "residue_name_1": r[11:14],
          "chain_1": r[15],
-         "residue_number_1": int(r[17:21]) if r[17:21] else None,
+         "residue_number_1": int(r[17:21]),
          "insert_code_1": r[21],
          "residue_name_2": r[25:28],
          "chain_2": r[29],
-         "residue_number_2": int(r[31:35]) if r[31:35] else None,
+         "residue_number_2": int(r[31:35]),
          "insert_code_2": r[35],
          "symmetry_1": r[59:65],
          "symmetry_2": r[66:72],
-         "length": float(r[73:78]) if r[73:78] else None
+         "length": float(r[73:78])
         } for r in ssbonds]
 
 
@@ -426,32 +429,32 @@ class PdbDataFile:
          "alt_loc_1": r[16],
          "residue_name_1": r[17:20],
          "chain_1": r[21],
-         "residue_number_1": int(r[22:26]) if r[22:26] else None,
+         "residue_number_1": int(r[22:26]),
          "insert_code_1": r[26],
          "atom_2": r[42:46],
          "alt_loc_2": r[46],
          "residue_name_2": r[47:50],
          "chain_2": r[51],
-         "residue_number_2": int(r[52:56]) if r[52:56] else None,
+         "residue_number_2": int(r[52:56]),
          "insert_code_2": r[56],
          "symmetry_1": r[59:65],
          "symmetry_2": r[66:72],
-         "length": float(r[73:78]) if r[73:78] else None
+         "length": float(r[73:78])
         } for r in links]
 
 
     def process_cispep(self):
         cispeps = self.pdb_file.get_records_by_name("CISPEP")
         self.cis_peptides = [{
-         "serial_num": int(r[7:10]) if r[7:10] else None,
+         "serial_num": int(r[7:10]),
          "residue_name_1": r[11:14],
          "chain_1": r[15],
-         "residue_number_1": int(r[17:21]) if r[17:21] else None,
+         "residue_number_1": int(r[17:21]),
          "insert_1": r[21],
          "residue_name_2": r[25:28],
          "chain_2": r[29],
-         "residue_number_2": int(r[31:35]) if r[31:35] else None,
+         "residue_number_2": int(r[31:35]),
          "insert_2": r[35],
-         "model_number": int(r[43:46]) if r[43:46] else None,
-         "angle": float(r[54:59]) if r[54:59] else None
+         "model_number": int(r[43:46]),
+         "angle": float(r[54:59])
         } for r in cispeps]
