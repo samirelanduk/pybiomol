@@ -657,6 +657,25 @@ class ConnectivityAnnotationSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.links, [])
 
 
+    def test_cispep(self):
+        self.assertEqual(
+         self.data_file.cis_peptides,
+         [{
+          "serial_num": 1,
+          "residue_name_1": "ASP",
+          "chain_1": "B",
+          "residue_number_1": 1188,
+          "insert_1": None,
+          "residue_name_2": "PRO",
+          "chain_2": "B",
+          "residue_number_2": 1189,
+          "insert_2": None,
+          "model_number": 0,
+          "angle": 0.35
+         }]
+        )
+
+
 
 if __name__ == "__main__":
     unittest.main()
