@@ -44,6 +44,8 @@ class PdbDataFile:
 
         self.process_site()
 
+        self.process_crystal()
+
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -483,3 +485,15 @@ class PdbDataFile:
              "residue_count": int(records[0][15:17]),
              "residues": residues
             })
+
+
+    def process_crystal(self):
+        crystal = self.pdb_file.get_record_by_name("CRYST1")
+        self.crystal_a = float(crystal[6:15]) if crystal else None
+        self.crystal_b = float(crystal[15:24]) if crystal else None
+        self.crystal_c = float(crystal[24:33]) if crystal else None
+        self.crystal_alpha = float(crystal[33:40]) if crystal else None
+        self.crystal_beta = float(crystal[40:47]) if crystal else None
+        self.crystal_gamma = float(crystal[47:54]) if crystal else None
+        self.crystal_s_group = crystal[55:66] if crystal else None
+        self.crystal_z = int(crystal[66:70]) if crystal else None

@@ -716,5 +716,36 @@ class MiscellaneousSectionTest(unittest.TestCase):
         )
         self.assertEqual(self.empty_data_file.sites, [])
 
+
+
+class CrystalSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/crystal_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_crystal(self):
+        self.assertEqual(self.data_file.crystal_a, 57.57)
+        self.assertEqual(self.data_file.crystal_b, 55.482)
+        self.assertEqual(self.data_file.crystal_c, 66.129)
+        self.assertEqual(self.data_file.crystal_alpha, 90.0)
+        self.assertEqual(self.data_file.crystal_beta, 94.28)
+        self.assertEqual(self.data_file.crystal_gamma, 90.0)
+        self.assertEqual(self.data_file.crystal_s_group, "P 1 21 1")
+        self.assertEqual(self.data_file.crystal_z, 4)
+        self.assertEqual(self.empty_data_file.crystal_a, None)
+        self.assertEqual(self.empty_data_file.crystal_b, None)
+        self.assertEqual(self.empty_data_file.crystal_c, None)
+        self.assertEqual(self.empty_data_file.crystal_alpha, None)
+        self.assertEqual(self.empty_data_file.crystal_beta, None)
+        self.assertEqual(self.empty_data_file.crystal_gamma, None)
+        self.assertEqual(self.empty_data_file.crystal_s_group, None)
+        self.assertEqual(self.empty_data_file.crystal_z, None)
+
+
+
 if __name__ == "__main__":
     unittest.main()
