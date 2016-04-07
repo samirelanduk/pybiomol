@@ -617,6 +617,46 @@ class ConnectivityAnnotationSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.ss_bonds, [])
 
 
+    def test_link(self):
+        self.assertEqual(
+         self.data_file.links,
+         [{
+          "atom_1": "O",
+          "alt_loc_1": None,
+          "residue_name_1": "TYR",
+          "chain_1": "A",
+          "residue_number_1": 146,
+          "insert_code_1": None,
+          "atom_2": "K",
+          "alt_loc_2": None,
+          "residue_name_2": "K",
+          "chain_2": "A",
+          "residue_number_2": 501,
+          "insert_code_2": None,
+          "symmetry_1": "1555",
+          "symmetry_2": "1555",
+          "length": 2.75
+         }, {
+          "atom_1": "OG1",
+          "alt_loc_1": None,
+          "residue_name_1": "THR",
+          "chain_1": "A",
+          "residue_number_1": 143,
+          "insert_code_1": None,
+          "atom_2": "K",
+          "alt_loc_2": None,
+          "residue_name_2": "K",
+          "chain_2": "A",
+          "residue_number_2": 504,
+          "insert_code_2": None,
+          "symmetry_1": "1555",
+          "symmetry_2": "1555",
+          "length": 2.78
+         }]
+        )
+        self.assertEqual(self.empty_data_file.links, [])
+
+
 
 if __name__ == "__main__":
     unittest.main()

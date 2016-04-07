@@ -36,6 +36,7 @@ class PdbDataFile:
         self.process_sheet()
 
         self.process_ssbond()
+        self.process_link()
 
 
     def __repr__(self):
@@ -415,3 +416,24 @@ class PdbDataFile:
          "symmetry_2": r[66:72],
          "length": float(r[73:78]) if r[73:78] else None
         } for r in ssbonds]
+
+
+    def process_link(self):
+        links = self.pdb_file.get_records_by_name("LINK")
+        self.links = [{
+         "atom_1": r[12:16],
+         "alt_loc_1": r[16],
+         "residue_name_1": r[17:20],
+         "chain_1": r[21],
+         "residue_number_1": int(r[22:26]) if r[22:26] else None,
+         "insert_code_1": r[26],
+         "atom_2": r[42:46],
+         "alt_loc_2": r[46],
+         "residue_name_2": r[47:50],
+         "chain_2": r[51],
+         "residue_number_2": int(r[52:56]) if r[52:56] else None,
+         "insert_code_2": r[56],
+         "symmetry_1": r[59:65],
+         "symmetry_2": r[66:72],
+         "length": float(r[73:78]) if r[73:78] else None
+        } for r in links]
