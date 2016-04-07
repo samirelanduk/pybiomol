@@ -677,5 +677,44 @@ class ConnectivityAnnotationSectionTest(unittest.TestCase):
 
 
 
+class MiscellaneousSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/miscellaneous_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_site(self):
+        self.assertEqual(
+         self.data_file.sites,
+         [
+          {
+           "site_id": "AC1",
+           "residue_count": 6,
+           "residues": [
+            {"residue_name": "ASP", "chain": "A", "residue_number": 70, "insert_code": None},
+            {"residue_name": "LYS", "chain": "A", "residue_number": 72, "insert_code": None},
+            {"residue_name": "HOH", "chain": "A", "residue_number": 3015, "insert_code": None}
+           ]
+          }, {
+           "site_id": "AC3",
+           "residue_count": 18,
+           "residues": [
+            {"residue_name": "ALA", "chain": "A", "residue_number": 18, "insert_code": None},
+            {"residue_name": "ASP", "chain": "A", "residue_number": 20, "insert_code": None},
+            {"residue_name": "LYS", "chain": "A", "residue_number": 42, "insert_code": None},
+            {"residue_name": "ASP", "chain": "A", "residue_number": 70, "insert_code": None},
+            {"residue_name": "MET", "chain": "A", "residue_number": 126, "insert_code": None},
+            {"residue_name": "SER", "chain": "A", "residue_number": 127, "insert_code": None},
+            {"residue_name": "SER", "chain": "A", "residue_number": 158, "insert_code": None},
+            {"residue_name": "PRO", "chain": "A", "residue_number": 180, "insert_code": None}
+           ]
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.sites, [])
+
 if __name__ == "__main__":
     unittest.main()
