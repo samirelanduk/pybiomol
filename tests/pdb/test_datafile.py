@@ -482,6 +482,7 @@ class HeterogenSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.het_formulae, {})
 
 
+
 class SecondaryStructureSectionTest(unittest.TestCase):
 
     def setUp(self):
@@ -583,6 +584,37 @@ class SecondaryStructureSectionTest(unittest.TestCase):
          ]
         )
         self.assertEqual(self.empty_data_file.sheets, [])
+
+
+
+class ConnectivityAnnotationSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/connectivity_annotation_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_ssbond(self):
+        self.assertEqual(
+         self.data_file.ss_bonds,
+         [{
+          "serial_num": 1,
+          "residue_name_1": "CYS",
+          "chain_1": "A",
+          "residue_number_1": 123,
+          "insert_code_1": None,
+          "residue_name_2": "CYS",
+          "chain_2": "A",
+          "residue_number_2": 155,
+          "insert_code_2": None,
+          "symmetry_1": "1555",
+          "symmetry_2": "1555",
+          "length": 2.04
+         }]
+        )
+        self.assertEqual(self.empty_data_file.ss_bonds, [])
 
 
 

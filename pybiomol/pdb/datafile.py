@@ -35,6 +35,8 @@ class PdbDataFile:
         self.process_helix()
         self.process_sheet()
 
+        self.process_ssbond()
+
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -395,3 +397,21 @@ class PdbDataFile:
               "previous_insert": r[69]
              } for r in strands]
             })
+
+
+    def process_ssbond(self):
+        ssbonds = self.pdb_file.get_records_by_name("SSBOND")
+        self.ss_bonds = [{
+         "serial_num": int(r[7:10]) if r[7:10] else None,
+         "residue_name_1": r[11:14],
+         "chain_1": r[15],
+         "residue_number_1": int(r[17:21]) if r[17:21] else None,
+         "insert_code_1": r[21],
+         "residue_name_2": r[25:28],
+         "chain_2": r[29],
+         "residue_number_2": int(r[31:35]) if r[31:35] else None,
+         "insert_code_2": r[35],
+         "symmetry_1": r[59:65],
+         "symmetry_2": r[66:72],
+         "length": float(r[73:78]) if r[73:78] else None
+        } for r in ssbonds]
