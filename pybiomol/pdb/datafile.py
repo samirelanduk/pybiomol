@@ -46,6 +46,7 @@ class PdbDataFile:
 
         self.process_crystal()
         self.process_origx()
+        self.process_scale()
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -515,3 +516,21 @@ class PdbDataFile:
         self.crystal_o32 = float(origx3[20:30]) if origx3 else None
         self.crystal_o33 = float(origx3[30:40]) if origx3 else None
         self.crystal_t3 = float(origx3[45:55]) if origx3 else None
+
+
+    def process_scale(self):
+        scale1 = self.pdb_file.get_record_by_name("SCALE1")
+        self.crystal_s11 = float(scale1[10:20]) if scale1 else None
+        self.crystal_s12 = float(scale1[20:30]) if scale1 else None
+        self.crystal_s13 = float(scale1[30:40]) if scale1 else None
+        self.crystal_u1 = float(scale1[45:55]) if scale1 else None
+        scale2 = self.pdb_file.get_record_by_name("SCALE2")
+        self.crystal_s21 = float(scale2[10:20]) if scale2 else None
+        self.crystal_s22 = float(scale2[20:30]) if scale2 else None
+        self.crystal_s23 = float(scale2[30:40]) if scale2 else None
+        self.crystal_u2 = float(scale2[45:55]) if scale2 else None
+        scale3 = self.pdb_file.get_record_by_name("SCALE3")
+        self.crystal_s31 = float(scale3[10:20]) if scale3 else None
+        self.crystal_s32 = float(scale3[20:30]) if scale3 else None
+        self.crystal_s33 = float(scale3[30:40]) if scale3 else None
+        self.crystal_u3 = float(scale3[45:55]) if scale3 else None

@@ -773,6 +773,33 @@ class CrystalSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.crystal_t3, None)
 
 
+    def test_scale(self):
+        self.assertEqual(self.data_file.crystal_s11, 0.01737)
+        self.assertEqual(self.data_file.crystal_s12, 0.0)
+        self.assertEqual(self.data_file.crystal_s13, 0.001301)
+        self.assertEqual(self.data_file.crystal_u1, 0.0)
+        self.assertEqual(self.data_file.crystal_s21, 0.0)
+        self.assertEqual(self.data_file.crystal_s22, 0.018024)
+        self.assertEqual(self.data_file.crystal_s23, 0.0)
+        self.assertEqual(self.data_file.crystal_u2, 0.0)
+        self.assertEqual(self.data_file.crystal_s31, 0.0)
+        self.assertEqual(self.data_file.crystal_s32, 0.0)
+        self.assertEqual(self.data_file.crystal_s33, 0.015164)
+        self.assertEqual(self.data_file.crystal_u3, 0.0)
+        self.assertEqual(self.empty_data_file.crystal_s11, None)
+        self.assertEqual(self.empty_data_file.crystal_s12, None)
+        self.assertEqual(self.empty_data_file.crystal_s13, None)
+        self.assertEqual(self.empty_data_file.crystal_u1, None)
+        self.assertEqual(self.empty_data_file.crystal_s21, None)
+        self.assertEqual(self.empty_data_file.crystal_s22, None)
+        self.assertEqual(self.empty_data_file.crystal_s23, None)
+        self.assertEqual(self.empty_data_file.crystal_u2, None)
+        self.assertEqual(self.empty_data_file.crystal_s31, None)
+        self.assertEqual(self.empty_data_file.crystal_s32, None)
+        self.assertEqual(self.empty_data_file.crystal_s33, None)
+        self.assertEqual(self.empty_data_file.crystal_u3, None)
+
+
 
 if __name__ == "__main__":
     unittest.main()
