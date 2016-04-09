@@ -45,7 +45,7 @@ class PdbDataFile:
         self.process_site()
 
         self.process_crystal()
-
+        self.process_origx()
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -497,3 +497,21 @@ class PdbDataFile:
         self.crystal_gamma = float(crystal[47:54]) if crystal else None
         self.crystal_s_group = crystal[55:66] if crystal else None
         self.crystal_z = int(crystal[66:70]) if crystal else None
+
+
+    def process_origx(self):
+        origx1 = self.pdb_file.get_record_by_name("ORIGX1")
+        self.crystal_o11 = float(origx1[10:20]) if origx1 else None
+        self.crystal_o12 = float(origx1[20:30]) if origx1 else None
+        self.crystal_o13 = float(origx1[30:40]) if origx1 else None
+        self.crystal_t1 = float(origx1[45:55]) if origx1 else None
+        origx2 = self.pdb_file.get_record_by_name("ORIGX2")
+        self.crystal_o21 = float(origx2[10:20]) if origx2 else None
+        self.crystal_o22 = float(origx2[20:30]) if origx2 else None
+        self.crystal_o23 = float(origx2[30:40]) if origx2 else None
+        self.crystal_t2 = float(origx2[45:55]) if origx2 else None
+        origx3 = self.pdb_file.get_record_by_name("ORIGX3")
+        self.crystal_o31 = float(origx3[10:20]) if origx3 else None
+        self.crystal_o32 = float(origx3[20:30]) if origx3 else None
+        self.crystal_o33 = float(origx3[30:40]) if origx3 else None
+        self.crystal_t3 = float(origx3[45:55]) if origx3 else None

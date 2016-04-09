@@ -746,6 +746,33 @@ class CrystalSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.crystal_z, None)
 
 
+    def test_origx(self):
+        self.assertEqual(self.data_file.crystal_o11, 0.963457)
+        self.assertEqual(self.data_file.crystal_o12, 0.136613)
+        self.assertEqual(self.data_file.crystal_o13, 0.230424)
+        self.assertEqual(self.data_file.crystal_t1, 16.61)
+        self.assertEqual(self.data_file.crystal_o21, -0.158977)
+        self.assertEqual(self.data_file.crystal_o22, 0.983924)
+        self.assertEqual(self.data_file.crystal_o23, 0.081383)
+        self.assertEqual(self.data_file.crystal_t2, 13.72)
+        self.assertEqual(self.data_file.crystal_o31, -0.215598)
+        self.assertEqual(self.data_file.crystal_o32, -0.115048)
+        self.assertEqual(self.data_file.crystal_o33, 0.969683)
+        self.assertEqual(self.data_file.crystal_t3, 37.65)
+        self.assertEqual(self.empty_data_file.crystal_o11, None)
+        self.assertEqual(self.empty_data_file.crystal_o12, None)
+        self.assertEqual(self.empty_data_file.crystal_o13, None)
+        self.assertEqual(self.empty_data_file.crystal_t1, None)
+        self.assertEqual(self.empty_data_file.crystal_o21, None)
+        self.assertEqual(self.empty_data_file.crystal_o22, None)
+        self.assertEqual(self.empty_data_file.crystal_o23, None)
+        self.assertEqual(self.empty_data_file.crystal_t2, None)
+        self.assertEqual(self.empty_data_file.crystal_o31, None)
+        self.assertEqual(self.empty_data_file.crystal_o32, None)
+        self.assertEqual(self.empty_data_file.crystal_o33, None)
+        self.assertEqual(self.empty_data_file.crystal_t3, None)
+
+
 
 if __name__ == "__main__":
     unittest.main()
