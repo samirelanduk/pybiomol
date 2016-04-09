@@ -47,6 +47,7 @@ class PdbDataFile:
         self.process_crystal()
         self.process_origx()
         self.process_scale()
+        self.process_mtrix()
 
     def __repr__(self):
         return "<%s PdbDataFile>" % self.pdb_code if self.pdb_code else "????"
@@ -534,3 +535,27 @@ class PdbDataFile:
         self.crystal_s32 = float(scale3[20:30]) if scale3 else None
         self.crystal_s33 = float(scale3[30:40]) if scale3 else None
         self.crystal_u3 = float(scale3[45:55]) if scale3 else None
+
+
+    def process_mtrix(self):
+        mtrix1 = self.pdb_file.get_record_by_name("MTRIX1")
+        self.crystal_serial_1 = int(mtrix1[7:10]) if mtrix1 else None
+        self.crystal_m11 = float(mtrix1[10:20]) if mtrix1 else None
+        self.crystal_m12 = float(mtrix1[20:30]) if mtrix1 else None
+        self.crystal_m13 = float(mtrix1[30:40]) if mtrix1 else None
+        self.crystal_v1 = float(mtrix1[45:55]) if mtrix1 else None
+        self.crystal_i_given_1 = int(mtrix1[59]) == 1 if mtrix1 else False
+        mtrix2 = self.pdb_file.get_record_by_name("MTRIX2")
+        self.crystal_serial_2 = int(mtrix2[7:10]) if mtrix2 else None
+        self.crystal_m21 = float(mtrix2[10:20]) if mtrix2 else None
+        self.crystal_m22 = float(mtrix2[20:30]) if mtrix2 else None
+        self.crystal_m23 = float(mtrix2[30:40]) if mtrix2 else None
+        self.crystal_v2 = float(mtrix2[45:55]) if mtrix2 else None
+        self.crystal_i_given_2 = int(mtrix2[59]) == 1 if mtrix2 else False
+        mtrix3 = self.pdb_file.get_record_by_name("MTRIX3")
+        self.crystal_serial_3 = int(mtrix3[7:10]) if mtrix3 else None
+        self.crystal_m31 = float(mtrix3[10:20]) if mtrix3 else None
+        self.crystal_m32 = float(mtrix3[20:30]) if mtrix3 else None
+        self.crystal_m33 = float(mtrix3[30:40]) if mtrix3 else None
+        self.crystal_v3 = float(mtrix3[45:55]) if mtrix3 else None
+        self.crystal_i_given_3 = int(mtrix3[59]) == 1 if mtrix3 else False
