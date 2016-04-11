@@ -1084,6 +1084,7 @@ class CoordinateSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.heteroatoms, [])
 
 
+
 class ConnectivitySectionTest(unittest.TestCase):
 
     def setUp(self):
@@ -1133,6 +1134,8 @@ class BookkeepingSectionTest(unittest.TestCase):
          }
         )
         self.assertEqual(self.empty_data_file.master, {})
+
+
 
 if __name__ == "__main__":
     unittest.main()

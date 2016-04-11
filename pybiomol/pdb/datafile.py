@@ -3,6 +3,7 @@ import datetime
 int = lambda k: globals()["__builtins__"]["int"](k) if k else None
 float = lambda k: globals()["__builtins__"]["float"](k) if k else None
 
+
 class PdbDataFile:
 
     def __init__(self, pdb_file):
@@ -58,7 +59,6 @@ class PdbDataFile:
         self.process_conect()
 
         self.process_master()
-
 
 
     def __repr__(self):
