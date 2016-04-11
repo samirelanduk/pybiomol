@@ -55,6 +55,8 @@ class PdbDataFile:
         self.process_ter()
         self.process_hetatm()
 
+        self.process_conect()
+
 
 
     def __repr__(self):
@@ -666,3 +668,16 @@ class PdbDataFile:
            and r.number < m["end_record"]][0]["model_num"]
             if self.models else 1
         } for r in hetatms]
+
+
+    def process_conect(self):
+        conects = self.pdb_file.get_records_by_name("CONECT")
+        atom_numbers = sorted(list(set([int(r[6:11]) for r in conects])))
+        self.connections = [{
+         "atom_number": num,
+         "bonded_atoms": [
+          int(n) for n in self.merge_records(
+           [r for r in conects if int(r[6:11]) == num], 11
+          ).split()
+         ]
+        } for num in atom_numbers]

@@ -1083,5 +1083,27 @@ class CoordinateSectionTest(unittest.TestCase):
         )
         self.assertEqual(self.empty_data_file.heteroatoms, [])
 
+
+class ConnectivitySectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/connectivity_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_conect(self):
+        self.assertEqual(
+         self.data_file.connections,
+         [
+          {
+           "atom_number": 1179,
+           "bonded_atoms": [746, 1184, 1195, 1203, 1211, 1222]
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.connections, [])
+
 if __name__ == "__main__":
     unittest.main()
