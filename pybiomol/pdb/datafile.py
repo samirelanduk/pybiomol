@@ -57,6 +57,8 @@ class PdbDataFile:
 
         self.process_conect()
 
+        self.process_master()
+
 
 
     def __repr__(self):
@@ -681,3 +683,19 @@ class PdbDataFile:
           ).split()
          ]
         } for num in atom_numbers]
+
+
+    def process_master(self):
+        master = self.pdb_file.get_record_by_name("MASTER")
+        self.master = {
+          "remark_num": int(master[10:15]),
+          "het_num": int(master[20:25]),
+          "helix_num": int(master[25:30]),
+          "sheet_num": int(master[30:35]),
+          "site_num": int(master[40:45]),
+          "crystal_num": int(master[45:50]),
+          "coordinate_num": int(master[50:55]),
+          "ter_num": int(master[55:60]),
+          "conect_num": int(master[60:65]),
+          "seqres_num": int(master[65:70])
+        } if master else {}

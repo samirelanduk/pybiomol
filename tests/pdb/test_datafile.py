@@ -1105,5 +1105,34 @@ class ConnectivitySectionTest(unittest.TestCase):
         )
         self.assertEqual(self.empty_data_file.connections, [])
 
+
+
+class BookkeepingSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/bookkeeping_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_master(self):
+        self.assertEqual(
+         self.data_file.master,
+         {
+          "remark_num": 40,
+          "het_num": 0,
+          "helix_num": 0,
+          "sheet_num": 0,
+          "site_num": 0,
+          "crystal_num": 6,
+          "coordinate_num": 2930,
+          "ter_num": 2,
+          "conect_num": 0,
+          "seqres_num": 29
+         }
+        )
+        self.assertEqual(self.empty_data_file.master, {})
+
 if __name__ == "__main__":
     unittest.main()
