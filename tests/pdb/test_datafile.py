@@ -227,7 +227,6 @@ class TitleSectionTest(unittest.TestCase):
 
 
     def test_remark(self):
-        self.maxDiff = None
         self.assertEqual(
          self.data_file.remarks,
          [
@@ -839,6 +838,250 @@ class CrystalSectionTest(unittest.TestCase):
         self.assertEqual(self.empty_data_file.crystal_i_given_3, False)
 
 
+
+class CoordinateSectionTest(unittest.TestCase):
+
+    def setUp(self):
+        with open("tests/pdb/pdb_files/coordinate_data.pdb") as f:
+            pdb_file = pybiomol.PdbFile(f.read())
+            self.data_file = pybiomol.PdbDataFile(pdb_file)
+            self.empty_data_file = pybiomol.PdbDataFile(pybiomol.PdbFile(""))
+
+
+    def test_model(self):
+        self.assertEqual(
+         self.data_file.models,
+         [
+          {
+           "model_num": 1,
+           "start_record": 1,
+           "end_record": 8
+          }, {
+           "model_num": 2,
+           "start_record": 9,
+           "end_record": 16
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.models, [])
+
+
+    def test_atom(self):
+        self.assertEqual(
+         self.data_file.atoms,
+         [
+          {
+           "number": 107,
+           "name": "N",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "x": 12.681,
+           "y": 37.302,
+           "z": -25.211,
+           "occupancy": 1.0,
+           "temperature_factor": 15.56,
+           "element": "N",
+           "charge": None,
+           "model": 1
+          }, {
+           "number": 108,
+           "name": "CA",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "x": 11.982,
+           "y": 37.996,
+           "z": -26.241,
+           "occupancy": 1.0,
+           "temperature_factor": 16.92,
+           "element": "C",
+           "charge": None,
+           "model": 1
+          }, {
+           "number": 107,
+           "name": "N",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "x": 12.681,
+           "y": 37.302,
+           "z": -25.211,
+           "occupancy": 1.0,
+           "temperature_factor": 15.56,
+           "element": "N",
+           "charge": None,
+           "model": 2
+          }, {
+           "number": 108,
+           "name": "CA",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "x": 11.982,
+           "y": 37.996,
+           "z": -26.241,
+           "occupancy": 1.0,
+           "temperature_factor": 16.92,
+           "element": "C",
+           "charge": None,
+           "model": 2
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.atoms, [])
+
+
+    def test_anisou(self):
+        self.assertEqual(
+         self.data_file.anisou,
+         [
+          {
+           "number": 107,
+           "name": "N",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "u11": 2406,
+           "u22": 1892,
+           "u33": 1614,
+           "u12": 198,
+           "u13": 519,
+           "u23": -328,
+           "element": "N",
+           "charge": None,
+           "model": 1
+          }, {
+           "number": 108,
+           "name": "CA",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "u11": 2748,
+           "u22": 2004,
+           "u33": 1679,
+           "u12": -21,
+           "u13": 155,
+           "u23": -419,
+           "element": "C",
+           "charge": None,
+           "model": 1
+          }, {
+           "number": 107,
+           "name": "N",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "u11": 2406,
+           "u22": 1892,
+           "u33": 1614,
+           "u12": 198,
+           "u13": 519,
+           "u23": -328,
+           "element": "N",
+           "charge": None,
+           "model": 2
+          }, {
+           "number": 108,
+           "name": "CA",
+           "alt_loc": None,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "u11": 2748,
+           "u22": 2004,
+           "u33": 1679,
+           "u12": -21,
+           "u13": 155,
+           "u23": -419,
+           "element": "C",
+           "charge": None,
+           "model": 2
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.anisou, [])
+
+
+    def test_ter(self):
+        self.assertEqual(
+         self.data_file.terminals,
+         [
+          {
+           "number": 109,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "model": 1
+          }, {
+           "number": 109,
+           "residue_name": "GLY",
+           "chain": "A",
+           "residue_number": 13,
+           "insert_code": None,
+           "model": 2
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.terminals, [])
+
+
+    def test_hetatm(self):
+        self.assertEqual(
+         self.data_file.heteroatoms,
+         [
+          {
+           "number": 8237,
+           "name": "MG",
+           "alt_loc": None,
+           "residue_name": "MG",
+           "chain": "A",
+           "residue_number": 1001,
+           "insert_code": None,
+           "x": 13.872,
+           "y": -2.555,
+           "z": -29.045,
+           "occupancy": 1.0,
+           "temperature_factor": 27.36,
+           "element": "MG",
+           "charge": None,
+           "model": 1
+          }, {
+           "number": 8237,
+           "name": "MG",
+           "alt_loc": None,
+           "residue_name": "MG",
+           "chain": "A",
+           "residue_number": 1001,
+           "insert_code": None,
+           "x": 13.872,
+           "y": -2.555,
+           "z": -29.045,
+           "occupancy": 1.0,
+           "temperature_factor": 27.36,
+           "element": "MG",
+           "charge": None,
+           "model": 2
+          }
+         ]
+        )
+        self.assertEqual(self.empty_data_file.heteroatoms, [])
 
 if __name__ == "__main__":
     unittest.main()

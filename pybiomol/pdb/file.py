@@ -6,7 +6,7 @@ class PdbFile:
         ])
         self.records = [
          PdbRecord(i, line) for i, line in
-          enumerate(self.file_contents.split("\n")) if line
+          enumerate(self.file_contents.split("\n"), start=1) if line
         ]
 
 
