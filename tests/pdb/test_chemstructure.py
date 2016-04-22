@@ -3,12 +3,15 @@ import sys
 sys.path.append(".")
 import pybiomol
 
-class AtomTest(unittest.TestCase):
+class ChemTest(unittest.TestCase):
 
     def get_atom(self, element="C", xyz=(10, 10, 10), name=None):
         atom = pybiomol.Atom(element, 1, *xyz, name=name)
         return atom
 
+
+
+class AtomTest(ChemTest):
 
     def test_can_make_atom(self):
         atom = self.get_atom()
@@ -20,6 +23,7 @@ class AtomTest(unittest.TestCase):
         self.assertIsInstance(atom.z, float)
         self.assertIsInstance(atom.name, str)
         self.assertEqual(atom.name, atom.element)
+        str(atom)
 
 
     def test_can_make_atom_with_name(self):
@@ -45,6 +49,21 @@ class AtomTest(unittest.TestCase):
         self.assertAlmostEqual(atom.get_mass(), 137, delta=0.5)
         atom = self.get_atom(element="XXX")
         self.assertEqual(atom.get_mass(), 0)
+
+
+
+class AtomicStructureTest(ChemTest):
+
+    def test_can_make_atomic_structure(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        atomic_structure = pybiomol.AtomicStructure(atom1, atom2)
+        self.assertIsInstance(atomic_structure, pybiomol.AtomicStructure)
+        self.assertIsInstance(atomic_structure.atoms, list)
+        for atom in atomic_structure.atoms:
+            self.assertIsInstance(atom, pybiomol.Atom)
+            self.assertIn(atom, (atom1, atom2))
+        str(atomic_structure)
 
 
 
