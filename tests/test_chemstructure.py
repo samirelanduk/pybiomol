@@ -109,6 +109,15 @@ class BondTest(ChemTest):
         )
 
 
+    def test_can_create_covalent_bond(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        covalent_bond = pybiomol.CovalentBond(atom1, atom2)
+        self.assertIsInstance(covalent_bond, pybiomol.CovalentBond)
+        self.assertIsInstance(covalent_bond, pybiomol.Bond)
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
