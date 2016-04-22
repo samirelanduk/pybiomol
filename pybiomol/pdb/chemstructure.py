@@ -31,11 +31,17 @@ class Atom:
 class AtomicStructure:
 
     def __init__(self, *atoms):
+        for atom in atoms:
+            assert isinstance(atom, Atom), "AtomicStructure needs atoms, not %s" % type(atom)
         self.atoms = list(atoms)
 
 
     def __repr__(self):
         return "<Atomic Structure (%i atoms)>" % len(self.atoms)
+
+
+    def get_mass(self):
+        return sum([atom.get_mass() for atom in self.atoms])
 
 
 

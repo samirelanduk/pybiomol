@@ -66,6 +66,23 @@ class AtomicStructureTest(ChemTest):
         str(atomic_structure)
 
 
+    def test_can_get_mass(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        atomic_structure = pybiomol.AtomicStructure(atom1, atom2)
+        self.assertEqual(
+         atomic_structure.get_mass(),
+         atom1.get_mass() + atom2.get_mass()
+        )
+
+
+    def test_atomic_structure_will_only_accept_atoms(self):
+        self.assertRaises(
+         AssertionError,
+         lambda: pybiomol.AtomicStructure(self.get_atom(), "a string")
+        )
+
+
 
 if __name__ == "__main__":
     unittest.main()
