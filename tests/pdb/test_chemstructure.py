@@ -5,8 +5,8 @@ import pybiomol
 
 class AtomTest(unittest.TestCase):
 
-    def get_atom(self, xyz=(10, 10, 10), name=None):
-        atom = pybiomol.Atom("C", 1, *xyz, name=name)
+    def get_atom(self, element="C", xyz=(10, 10, 10), name=None):
+        atom = pybiomol.Atom(element, 1, *xyz, name=name)
         return atom
 
 
@@ -36,6 +36,15 @@ class AtomTest(unittest.TestCase):
          pymol_calculated_distance,
          delta=0.01
         )
+
+
+    def test_can_get_mass(self):
+        atom = self.get_atom()
+        self.assertAlmostEqual(atom.get_mass(), 12, delta=0.5)
+        atom = self.get_atom(element="Ba")
+        self.assertAlmostEqual(atom.get_mass(), 137, delta=0.5)
+        atom = self.get_atom(element="XXX")
+        self.assertEqual(atom.get_mass(), 0)
 
 
 
