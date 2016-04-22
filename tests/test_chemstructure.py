@@ -99,5 +99,16 @@ class BondTest(ChemTest):
         str(bond)
 
 
+    def test_can_get_bond_distance(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        bond = pybiomol.Bond(atom1, atom2)
+        self.assertEqual(
+         bond.get_length(),
+         atom1.distance_to(atom2)
+        )
+
+
+
 if __name__ == "__main__":
     unittest.main()

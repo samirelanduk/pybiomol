@@ -51,6 +51,16 @@ class Bond:
         self.atoms = set((atom1, atom2))
 
 
+    def __repr__(self):
+        atoms = list(self.atoms)
+        return "<Bond between %s atom and %s atom>" % (atoms[0].element, atoms[1].element)
+
+
+    def get_length(self):
+        atoms = list(self.atoms)
+        return atoms[0].distance_to(atoms[1])
+
+
 
 PERIODIC_TABLE = {
  "H": 1.0079, "HE": 4.0026, "LI": 6.941, "BE": 9.0122, "B": 10.811, "C": 12.0107,
