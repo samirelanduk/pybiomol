@@ -117,6 +117,34 @@ class BondTest(ChemTest):
         self.assertIsInstance(covalent_bond, pybiomol.Bond)
 
 
+    def test_can_bond_atoms_together(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        atom1.covalent_bond_to(atom2)
+        self.assertEqual(len(atom1.covalent_bonds), 1)
+        self.assertEqual(len(atom2.covalent_bonds), 1)
+        self.assertIs(atom1.covalent_bonds[0], atom2.covalent_bonds[0])
+        self.assertEqual(len(atom1.get_covalently_bonded_atoms()), 1)
+        self.assertEqual(len(atom2.get_covalently_bonded_atoms()), 1)
+        self.assertIs(atom1.get_covalently_bonded_atoms()[0], atom2)
+        self.assertIs(atom2.get_covalently_bonded_atoms()[0], atom1)
+        atom3 = self.get_atom(element="C", xyz=(30, 30, 30))
+        atom2.covalent_bond_to(atom3)
+        self.assertEqual(len(atom2.covalent_bonds), 2)
+        self.assertEqual(len(atom3.covalent_bonds), 1)
+        self.assertEqual(len(atom2.get_covalently_bonded_atoms()), 2)
+        self.assertEqual(len(atom3.get_covalently_bonded_atoms()), 1)
+
+
+    def test_can_only_covalently_bond_atoms_to_other_atoms(self):
+        atom = self.get_atom()
+        self.assertRaises(
+         AssertionError,
+         lambda: atom.covalent_bond_to("a string")
+        )
+
+
+
 
 
 if __name__ == "__main__":

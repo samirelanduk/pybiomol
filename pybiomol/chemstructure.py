@@ -9,6 +9,7 @@ class Atom:
         self.y = float(y)
         self.z = float(z)
         self.name = name if name else element
+        self.covalent_bonds = []
 
 
     def __repr__(self):
@@ -25,6 +26,24 @@ class Atom:
 
     def get_mass(self):
         return PERIODIC_TABLE.get(self.element.upper(), 0)
+
+
+    def covalent_bond_to(self, other_atom):
+        assert isinstance(other_atom, Atom), "Can only bond atoms to other atoms, not %s" % type(other_atom)
+        bond = CovalentBond(self, other_atom)
+        if other_atom not in self.get_covalently_bonded_atoms():
+            self.covalent_bonds.append(bond)
+        if self not in other_atom.get_covalently_bonded_atoms():
+            other_atom.covalent_bonds.append(bond)
+
+
+    def get_covalently_bonded_atoms(self):
+        atoms = []
+        for bond in self.covalent_bonds:
+            for atom in bond.atoms:
+                if atom is not self and atom not in atoms:
+                    atoms.append(atom)
+        return atoms
 
 
 
