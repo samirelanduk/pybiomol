@@ -84,5 +84,20 @@ class AtomicStructureTest(ChemTest):
 
 
 
+class BondTest(ChemTest):
+
+    def test_can_make_bond(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        bond = pybiomol.Bond(atom1, atom2)
+        self.assertIsInstance(bond, pybiomol.Bond)
+        self.assertIsInstance(bond.atoms, set)
+        self.assertEqual(len(bond.atoms), 2)
+        for atom in bond.atoms:
+            self.assertIsInstance(atom, pybiomol.Atom)
+            self.assertIn(atom, (atom1, atom2))
+        str(bond)
+
+
 if __name__ == "__main__":
     unittest.main()

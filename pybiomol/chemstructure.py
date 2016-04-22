@@ -45,6 +45,13 @@ class AtomicStructure:
 
 
 
+class Bond:
+
+    def __init__(self, atom1, atom2):
+        self.atoms = set((atom1, atom2))
+
+
+
 PERIODIC_TABLE = {
  "H": 1.0079, "HE": 4.0026, "LI": 6.941, "BE": 9.0122, "B": 10.811, "C": 12.0107,
   "N": 14.0067, "O": 15.9994, "F": 18.9984, "NE": 20.1797, "NA": 22.9897, "MG": 24.305,
