@@ -1,7 +1,6 @@
 import requests
 from .file import *
 from .datafile import *
-from ..chemstructure import *
 from .exceptions import *
 
 def get_pdb_from_string(string):
