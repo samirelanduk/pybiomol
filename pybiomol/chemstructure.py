@@ -46,6 +46,23 @@ class Atom:
         return atoms
 
 
+    def get_covalently_accessible_atoms(self, already_checked=None):
+        already_checked = [] if already_checked is None else already_checked
+        if self not in already_checked:
+            already_checked.append(self)
+        i = 0
+        while len([a for a in self.get_covalently_bonded_atoms() if a not in already_checked]) > 0:
+            picked = [a for a in self.get_covalently_bonded_atoms() if a not in already_checked][0]
+            picked.get_covalently_accessible_atoms(already_checked)
+            i += 1
+            if i > 10: break
+        return [a for a in already_checked if a is not self]
+
+
+
+
+
+
 
 class AtomicStructure:
 
@@ -62,6 +79,14 @@ class AtomicStructure:
     def get_mass(self):
         return sum([atom.get_mass() for atom in self.atoms])
 
+
+class Molecule(AtomicStructure):
+
+    def __init__(self, *atoms):
+        assert set(atoms[1:]).issubset(
+         set(atoms[0].get_covalently_accessible_atoms())
+        ), "You can only make a molecule with atoms that are bonded to each other"
+        AtomicStructure.__init__(self, *atoms)
 
 
 class Bond:

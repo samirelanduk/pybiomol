@@ -83,6 +83,25 @@ class AtomicStructureTest(ChemTest):
         )
 
 
+    def test_can_make_molecule(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        atom1.covalent_bond_to(atom2)
+        molecule = pybiomol.Molecule(atom1, atom2)
+        self.assertIsInstance(molecule, pybiomol.Molecule)
+
+
+    def test_can_only_make_molecule_with_joined_atoms(self):
+        atom1 = self.get_atom()
+        atom2 = self.get_atom(element="N", xyz=(20, 20, 20))
+        self.assertRaises(
+         AssertionError,
+         lambda: pybiomol.Molecule(atom1, atom2)
+        )
+
+
+
+
 
 class BondTest(ChemTest):
 
@@ -142,6 +161,40 @@ class BondTest(ChemTest):
          AssertionError,
          lambda: atom.covalent_bond_to("a string")
         )
+
+
+    def test_can_get_all_covalently_accessible_atoms(self):
+        atom1 = self.get_atom(name="atom1")
+        atom2 = self.get_atom(name="atom2")
+        atom3 = self.get_atom(name="atom3")
+        atom4 = self.get_atom(name="atom4")
+        atom5 = self.get_atom(name="atom5")
+        atom6 = self.get_atom(name="atom6")
+        atom7 = self.get_atom(name="atom7")
+        atom8 = self.get_atom(name="atom8")
+        atom9 = self.get_atom(name="atom9")
+        atom10 = self.get_atom(name="atom10")
+        atom11 = self.get_atom(name="atom11")
+        atom1.covalent_bond_to(atom2)
+        atom1.covalent_bond_to(atom3)
+        atom4.covalent_bond_to(atom2)
+        atom4.covalent_bond_to(atom3)
+        atom1.covalent_bond_to(atom5)
+        atom5.covalent_bond_to(atom6)
+        atom5.covalent_bond_to(atom8)
+        atom6.covalent_bond_to(atom7)
+        atom8.covalent_bond_to(atom9)
+        atom4.covalent_bond_to(atom10)
+        atom4.covalent_bond_to(atom11)
+        self.assertEqual(
+         len(atom1.get_covalently_accessible_atoms()),
+         10
+        )
+        self.assertEqual(
+         set(atom1.get_covalently_accessible_atoms()),
+         set((atom2, atom3, atom4, atom5, atom6, atom7, atom8, atom9, atom10, atom11))
+        )
+
 
 
 
