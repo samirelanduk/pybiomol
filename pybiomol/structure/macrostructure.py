@@ -24,3 +24,18 @@ class ResiduicStructure(AtomicStructure):
 
     def __repr__(self):
         return "<ResiduicStructure (%i residues)>" % len(self.residues)
+
+
+
+class ResidueSequence(Molecule, ResiduicStructure):
+
+    def __init__(self, residues):
+        ResiduicStructure.__init__(self, residues)
+        atoms = []
+        for residue in self.residues:
+            atoms += residue.atoms
+        Molecule.__init__(self, *atoms)
+
+
+    def __repr__(self):
+        return "<ResidueSequence (%i residues)>" % len(self.residues)

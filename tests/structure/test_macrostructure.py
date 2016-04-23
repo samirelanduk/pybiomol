@@ -30,5 +30,15 @@ class ResiduicStructureTest(MacroTest):
         str(residuic_structure)
 
 
+
+class ResidueSequenceTest(MacroTest):
+
+    def test_can_make_residuic_sequence(self):
+        residues = [self.get_residue() for _ in range(10)]
+        for index, residue in enumerate(residues[:-1]):
+            residue.atoms[-1].covalent_bond_to(residues[index + 1].atoms[0])
+        residue_sequence = pybiomol.ResidueSequence(residues)
+        str(residue_sequence)
+
 if __name__ == "__main__":
     unittest.main()
