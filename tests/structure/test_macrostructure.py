@@ -96,5 +96,40 @@ class AlphaHelixTest(MacroTest):
          lambda: pybiomol.AlphaHelix(helix_residues, chain)
         )
 
+
+
+class BetaSheetTest(MacroTest):
+
+    def get_beta_strand(self, sheet=None):
+        residues = [self.get_residue() for _ in range(10)]
+        for index, residue in enumerate(residues[:-1]):
+            residue.atoms[-1].covalent_bond_to(residues[index + 1].atoms[0])
+        chain = pybiomol.ProteinChain("A", residues)
+        strand_residues = chain.residues[1:6]
+        strand = pybiomol.BetaStrand(strand_residues, chain, sheet=sheet)
+        return strand
+
+
+    def test_can_make_beta_strand(self):
+        strand = self.get_beta_strand()
+        self.assertTrue(strand.sheet is None)
+        str(strand)
+
+
+    def test_can_make_beta_sheet(self):
+        strands = [self.get_beta_strand() for _ in range(4)]
+        sheet = pybiomol.BetaSheet(strands)
+        str(sheet)
+
+
+    def test_can_make_strand_with_sheet(self):
+        strands = [self.get_beta_strand() for _ in range(4)]
+        sheet = pybiomol.BetaSheet(strands)
+        new_strand = self.get_beta_strand(sheet=sheet)
+        self.assertIs(new_strand.sheet, sheet)
+        self.assertIn(new_strand, sheet.strands)
+
+
+
 if __name__ == "__main__":
     unittest.main()

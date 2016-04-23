@@ -48,6 +48,7 @@ class ProteinChain(ResidueSequence):
         self.name = name
         ResidueSequence.__init__(self, residues)
         self.alpha_helices = []
+        self.beta_strands = []
 
 
     def __repr__(self):
@@ -79,3 +80,37 @@ class AlphaHelix(ResidueSequence):
 
     def __repr__(self):
         return "<AlphaHelix (%i residues)>" % len(self.residues)
+
+
+
+class BetaStrand(ResidueSequence):
+
+    def __init__(self, residues, chain, sheet=None):
+        for residue in residues:
+            assert (residue in chain.residues)
+        self.chain = chain
+        chain.beta_strands.append(self)
+        ResidueSequence.__init__(self, residues)
+        self.sheet = sheet
+        if sheet:
+            sheet.strands.append(self)
+
+
+    def __repr__(self):
+        return "<BetaStrand (%i residues)>" % len(self.residues)
+
+
+
+class BetaSheet(ResiduicStructure):
+
+    def __init__(self, strands):
+        self.strands = strands
+        residues = []
+        for strand in strands:
+            strand.sheet = self
+            residues += strand.residues
+        ResiduicStructure.__init__(self, residues)
+
+
+    def __repr__(self):
+        return "<BetaSheet (%i strands)>" % len(self.strands)
