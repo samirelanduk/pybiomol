@@ -1,12 +1,14 @@
 import requests
 from .file import *
 from .datafile import *
+from .structurefile import *
 from .exceptions import *
 
 def get_pdb_from_string(string):
     pdb_file = PdbFile(string)
     pdb_datafile = PdbDataFile(pdb_file)
-    return pdb_datafile
+    pdb = Pdb(pdb_datafile)
+    return pdb
 
 
 def get_pdb_from_file(path):
