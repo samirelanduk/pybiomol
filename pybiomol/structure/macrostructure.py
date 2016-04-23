@@ -47,6 +47,7 @@ class ProteinChain(ResidueSequence):
     def __init__(self, name, residues):
         self.name = name
         ResidueSequence.__init__(self, residues)
+        self.alpha_helices = []
 
 
     def __repr__(self):
@@ -63,3 +64,18 @@ class BindingSite(ResiduicStructure):
 
     def __repr__(self):
         return "<BindingSite (%i residues)>" % len(self.residues)
+
+
+
+class AlphaHelix(ResidueSequence):
+
+    def __init__(self, residues, chain):
+        for residue in residues:
+            assert (residue in chain.residues)
+        self.chain = chain
+        chain.alpha_helices.append(self)
+        ResidueSequence.__init__(self, residues)
+
+
+    def __repr__(self):
+        return "<AlphaHelix (%i residues)>" % len(self.residues)
