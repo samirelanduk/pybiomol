@@ -51,3 +51,15 @@ class ProteinChain(ResidueSequence):
 
     def __repr__(self):
         return "<Chain %s>" % self.name
+
+
+
+class BindingSite(ResiduicStructure):
+
+    def __init__(self, residues, ligand=None):
+        self.ligand = ligand
+        ResiduicStructure.__init__(self, residues)
+
+
+    def __repr__(self):
+        return "<BindingSite (%i residues)>" % len(self.residues)

@@ -51,5 +51,24 @@ class ProteinChainTest(MacroTest):
         chain = pybiomol.ProteinChain("A", residues)
         str(chain)
 
+
+
+class BindingSiteTest(MacroTest):
+
+    def test_can_make_residuic_structure_without_ligand(self):
+        residues = [self.get_residue() for _ in range(10)]
+        site = pybiomol.BindingSite(residues)
+        self.assertTrue(site.ligand is None)
+        str(site)
+
+
+    def test_can_make_residuic_structure_without_ligand(self):
+        residues = [self.get_residue() for _ in range(10)]
+        ligand = self.get_atom()
+        site = pybiomol.BindingSite(residues, ligand)
+        self.assertTrue(site.ligand is ligand)
+        str(site)
+        
+
 if __name__ == "__main__":
     unittest.main()
