@@ -60,10 +60,6 @@ class Atom:
 
 
 
-
-
-
-
 class AtomicStructure:
 
     def __init__(self, *atoms):
@@ -80,6 +76,7 @@ class AtomicStructure:
         return sum([atom.get_mass() for atom in self.atoms])
 
 
+
 class Molecule(AtomicStructure):
 
     def __init__(self, *atoms):
@@ -87,6 +84,7 @@ class Molecule(AtomicStructure):
          set(atoms[0].get_covalently_accessible_atoms())
         ), "You can only make a molecule with atoms that are bonded to each other"
         AtomicStructure.__init__(self, *atoms)
+
 
 
 class Bond:

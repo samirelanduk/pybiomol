@@ -101,8 +101,6 @@ class AtomicStructureTest(ChemTest):
 
 
 
-
-
 class BondTest(ChemTest):
 
     def test_can_make_bond(self):
@@ -194,9 +192,6 @@ class BondTest(ChemTest):
          set(atom1.get_covalently_accessible_atoms()),
          set((atom2, atom3, atom4, atom5, atom6, atom7, atom8, atom9, atom10, atom11))
         )
-
-
-
 
 
 
