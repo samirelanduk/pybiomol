@@ -40,5 +40,16 @@ class ResidueSequenceTest(MacroTest):
         residue_sequence = pybiomol.ResidueSequence(residues)
         str(residue_sequence)
 
+
+
+class ProteinChainTest(MacroTest):
+
+    def test_can_make_protein_chain(self):
+        residues = [self.get_residue() for _ in range(10)]
+        for index, residue in enumerate(residues[:-1]):
+            residue.atoms[-1].covalent_bond_to(residues[index + 1].atoms[0])
+        chain = pybiomol.ProteinChain("A", residues)
+        str(chain)
+
 if __name__ == "__main__":
     unittest.main()

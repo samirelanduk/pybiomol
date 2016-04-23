@@ -39,3 +39,15 @@ class ResidueSequence(Molecule, ResiduicStructure):
 
     def __repr__(self):
         return "<ResidueSequence (%i residues)>" % len(self.residues)
+
+
+
+class ProteinChain(ResidueSequence):
+
+    def __init__(self, name, residues):
+        self.name = name
+        ResidueSequence.__init__(self, residues)
+
+
+    def __repr__(self):
+        return "<Chain %s>" % self.name
