@@ -1,4 +1,4 @@
 class Pdb:
 
-    def __init__(self, date_file):
+    def __init__(self, data_file):
         self.data_file = data_file
