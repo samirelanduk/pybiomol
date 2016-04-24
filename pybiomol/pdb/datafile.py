@@ -205,7 +205,7 @@ class PdbDataFile:
             titls = [r for r in jrnls if r[12:16] == "TITL"]
             self.journal["title"] = self.merge_records(titls, 19) if titls else None
             edits = [r for r in jrnls if r[12:16] == "EDIT"]
-            self.journal["editors"] = self.merge_records(auths, 19).split(",") if edits else []
+            self.journal["editors"] = self.merge_records(edits, 19).split(",") if edits else []
             refs = [r for r in jrnls if r[12:16] == "REF"]
             self.journal["reference"] = {}
             if refs and "TO BE PUBLISHED" in refs[0]:

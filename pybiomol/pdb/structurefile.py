@@ -12,7 +12,16 @@ class Pdb:
          "replacement_code",
          "title",
          "split_codes",
-         "caveat"
+         "caveat",
+         "keywords",
+         "experimental_techniques",
+         "model_num",
+         "model_annotations",
+         "authors",
+         "revisions",
+         "supercedes",
+         "supercede_date",
+         "journal"
         ]
         for attr in transfer_attrs:
             self.__dict__[attr] = self.data_file.__dict__[attr]
