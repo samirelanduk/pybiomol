@@ -77,6 +77,23 @@ class PdbInformationTest(unittest.TestCase):
 
 
 
+class PdbModelTest(unittest.TestCase):
+
+    def setUp(self):
+        self.pdb = pybiomol.get_pdb_from_file("tests/pdb/pdb_files/1SAM.pdb")
+
+
+    def test_pdb_has_two_models(self):
+        self.assertEqual(
+         len(self.pdb.models),
+         2
+        )
+        for model in self.pdb.models:
+            self.assertIsInstance(model, pybiomol.PdbModel)
+            self.assertIsInstance(model, pybiomol.AtomicStructure)
+        self.assertIs(self.pdb.model, self.pdb.models[0])
+
+
 
 if __name__ == "__main__":
     unittest.main()
