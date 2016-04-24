@@ -10,7 +10,9 @@ class Pdb:
          "is_obsolete",
          "obsolete_date",
          "replacement_code",
-         "title"
+         "title",
+         "split_codes",
+         "caveat"
         ]
         for attr in transfer_attrs:
             self.__dict__[attr] = self.data_file.__dict__[attr]

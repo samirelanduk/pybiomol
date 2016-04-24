@@ -30,6 +30,11 @@ class PdbInformationTest(unittest.TestCase):
          self.pdb.title,
          "BASICALLY JUST A TEST PDB FILE THAT I HAVE CREATED FOR THE PURPOSES OF TESTING"
         )
+        self.assertEqual(self.pdb.split_codes, [])
+        self.assertEqual(
+         self.pdb.caveat,
+         "THIS IS NOT A REAL PDB FILE!"
+        )
 
 
 
