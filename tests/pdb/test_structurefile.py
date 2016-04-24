@@ -92,6 +92,18 @@ class PdbModelTest(unittest.TestCase):
             self.assertIsInstance(model, pybiomol.PdbModel)
             self.assertIsInstance(model, pybiomol.AtomicStructure)
         self.assertIs(self.pdb.model, self.pdb.models[0])
+        str(self.pdb.model)
+
+
+    def test_pdb_can_process_atoms(self):
+        self.assertEqual(len(self.pdb.model.macro_atoms), 56)
+        self.assertEqual(len(self.pdb.model.hetero_atoms), 12)
+        self.assertEqual(len(self.pdb.model.atoms), 68)
+        for atom in self.pdb.model.atoms:
+            self.assertIsInstance(atom, pybiomol.PdbAtom)
+            self.assertIs(atom.u11, None)
+        str(atom)
+
 
 
 
