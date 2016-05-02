@@ -5,8 +5,8 @@ import pybiomol
 
 class ChemTest(unittest.TestCase):
 
-    def get_atom(self, element="C", xyz=(10, 10, 10), name=None):
-        atom = pybiomol.Atom(element, 1, *xyz, name=name)
+    def get_atom(self, element="C", atom_id=1, xyz=(10, 10, 10), name=None):
+        atom = pybiomol.Atom(element, atom_id, *xyz, name=name)
         return atom
 
 
@@ -101,12 +101,23 @@ class AtomicStructureTest(ChemTest):
 
 
     def test_can_get_atom_by_name(self):
-        atom1 = self.get_atom("AAA")
-        atom2 = self.get_atom("AAA")
-        atom3 = self.get_atom("BBB")
+        atom1 = self.get_atom(name="AAA")
+        atom2 = self.get_atom(name="AAA")
+        atom3 = self.get_atom(name="BBB")
         atomic_structure = pybiomol.AtomicStructure(atom1, atom2, atom3)
         self.assertEqual(atomic_structure.get_atom_by_name("AAA"), atom1)
         self.assertEqual(atomic_structure.get_atom_by_name("BBB"), atom3)
+
+
+
+    def test_can_get_atom_by_number(self):
+        atom1 = self.get_atom(atom_id=1)
+        atom2 = self.get_atom(atom_id=2)
+        atom3 = self.get_atom(atom_id=3)
+        atomic_structure = pybiomol.AtomicStructure(atom1, atom3, atom2)
+        self.assertEqual(atomic_structure.get_atom_by_id(1), atom1)
+        self.assertEqual(atomic_structure.get_atom_by_id(2), atom2)
+        self.assertEqual(atomic_structure.get_atom_by_id(3), atom3)
 
 
 

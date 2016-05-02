@@ -82,6 +82,12 @@ class AtomicStructure:
                 return atom
 
 
+    def get_atom_by_id(self, atom_id):
+        for atom in self.atoms:
+            if atom.atom_id == atom_id:
+                return atom
+
+
 
 class Molecule(AtomicStructure):
 
