@@ -136,6 +136,11 @@ class PdbModelTest(unittest.TestCase):
         self.check_atom_bonds_other_atoms(479, [478, 480, 481])
 
 
+    def test_pdb_can_link_residues(self):
+        self.check_atom_bonds_other_atoms(476, [482])
+        self.check_atom_bonds_other_atoms(484, [493])
+
+
 
 
 if __name__ == "__main__":

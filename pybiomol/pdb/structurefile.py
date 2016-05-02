@@ -88,6 +88,16 @@ class PdbModel(chemstructure.AtomicStructure):
                 if bonded_atom:
                     self.get_atom_by_id(atom["number"]).covalent_bond_to(self.get_atom_by_id(bonded_atom["number"]))
 
+        for chain in sorted(list(set([a["chain"] for a in data_file.atoms]))):
+            residue_numbers = sorted(list(set([a["residue_number"] for a in data_file.atoms if a["chain"] == chain])))
+            for index, residue_number in enumerate(residue_numbers[:-1]):
+                carboxyl_atom_number = [a["number"] for a in data_file.atoms if a["residue_number"] == residue_number and a["name"] == "C"]
+                carboxyl_atom_number = carboxyl_atom_number[0] if carboxyl_atom_number else None
+                next_amino_nitrogen_number = [a["number"] for a in data_file.atoms if a["residue_number"] == residue_numbers[index+1] and a["name"] == "N"]
+                next_amino_nitrogen_number = next_amino_nitrogen_number[0] if next_amino_nitrogen_number else None
+                if carboxyl_atom_number is not None and next_amino_nitrogen_number is not None:
+                    self.get_atom_by_id(carboxyl_atom_number).covalent_bond_to(self.get_atom_by_id(next_amino_nitrogen_number))
+
 
 
     def __repr__(self):
