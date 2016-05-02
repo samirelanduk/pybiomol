@@ -1,4 +1,5 @@
 from ..structure import chemstructure
+from .residues import connection_data as _conn_data
 
 class Pdb:
 
@@ -77,6 +78,16 @@ class PdbModel(chemstructure.AtomicStructure):
             for bonded_atom in connection["bonded_atoms"]:
                 self.get_atom_by_id(connection["atom_number"]
                  ).covalent_bond_to(self.get_atom_by_id(bonded_atom))
+
+        for atom in data_file.atoms:
+            residue_mates = [a for a in data_file.atoms if a["chain"] == atom["chain"] and a["residue_number"] == atom["residue_number"]]
+            bond_atom_names = _conn_data.get(atom["residue_name"], {}).get(atom["name"], [])
+            for name in bond_atom_names:
+                bonded_atom = [a for a in residue_mates if a["name"] == name]
+                bonded_atom = bonded_atom[0] if bonded_atom else None
+                if bonded_atom:
+                    self.get_atom_by_id(atom["number"]).covalent_bond_to(self.get_atom_by_id(bonded_atom["number"]))
+
 
 
     def __repr__(self):

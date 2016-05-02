@@ -84,11 +84,11 @@ class PdbModelTest(unittest.TestCase):
 
 
     def check_atom_bonds_other_atoms(self, atom_id, other_atom_ids):
-        self.assertEqual(
-         self.pdb.model.get_atom_by_id(atom_id).get_covalently_bonded_atoms(),
-         [self.pdb.model.get_atom_by_id(other_atom_id)
-          for other_atom_id in other_atom_ids]
-        )
+        for other_atom_id in other_atom_ids:
+            self.assertIn(
+             self.pdb.model.get_atom_by_id(other_atom_id),
+             self.pdb.model.get_atom_by_id(atom_id).get_covalently_bonded_atoms()
+            )
 
 
     def test_pdb_has_two_models(self):
@@ -126,6 +126,14 @@ class PdbModelTest(unittest.TestCase):
         self.check_atom_bonds_other_atoms(3227, [3226, 3228, 3229])
         self.check_atom_bonds_other_atoms(3228, [3227])
         self.check_atom_bonds_other_atoms(3229, [3227])
+
+
+    def test_pdb_can_bond_standard_atoms(self):
+        self.check_atom_bonds_other_atoms(474, [475])
+        self.check_atom_bonds_other_atoms(475, [474, 478, 476])
+        self.check_atom_bonds_other_atoms(476, [475, 477])
+        self.check_atom_bonds_other_atoms(478, [475, 479])
+        self.check_atom_bonds_other_atoms(479, [478, 480, 481])
 
 
 
