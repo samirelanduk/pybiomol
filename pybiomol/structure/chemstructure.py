@@ -76,6 +76,12 @@ class AtomicStructure:
         return sum([atom.get_mass() for atom in self.atoms])
 
 
+    def get_atom_by_name(self, name):
+        for atom in self.atoms:
+            if atom.name == name:
+                return atom
+
+
 
 class Molecule(AtomicStructure):
 
