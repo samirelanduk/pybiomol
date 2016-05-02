@@ -100,6 +100,15 @@ class AtomicStructureTest(ChemTest):
         )
 
 
+    def test_can_get_atom_by_name(self):
+        atom1 = self.get_atom("AAA")
+        atom2 = self.get_atom("AAA")
+        atom3 = self.get_atom("BBB")
+        atomic_structure = pybiomol.AtomicStructure(atom1, atom2, atom3)
+        self.assertEqual(atomic_structure.get_atom_by_name("AAA"), atom1)
+        self.assertEqual(atomic_structure.get_atom_by_name("BBB"), atom3)
+
+
 
 class BondTest(ChemTest):
 
