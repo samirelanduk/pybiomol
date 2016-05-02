@@ -73,6 +73,11 @@ class PdbModel(chemstructure.AtomicStructure):
         all_atoms = self.macro_atoms + self.hetero_atoms
         chemstructure.AtomicStructure.__init__(self, *all_atoms)
 
+        for connection in data_file.connections:
+            for bonded_atom in connection["bonded_atoms"]:
+                self.get_atom_by_id(connection["atom_number"]
+                 ).covalent_bond_to(self.get_atom_by_id(bonded_atom))
+
 
     def __repr__(self):
         return "<PdbModel (%i atoms, %.2f Da)>" % (len(self.atoms), self.get_mass())

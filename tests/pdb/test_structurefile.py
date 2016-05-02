@@ -83,6 +83,14 @@ class PdbModelTest(unittest.TestCase):
         self.pdb = pybiomol.get_pdb_from_file("tests/pdb/pdb_files/1SAM.pdb")
 
 
+    def check_atom_bonds_other_atoms(self, atom_id, other_atom_ids):
+        self.assertEqual(
+         self.pdb.model.get_atom_by_id(atom_id).get_covalently_bonded_atoms(),
+         [self.pdb.model.get_atom_by_id(other_atom_id)
+          for other_atom_id in other_atom_ids]
+        )
+
+
     def test_pdb_has_two_models(self):
         self.assertEqual(
          len(self.pdb.models),
@@ -103,6 +111,21 @@ class PdbModelTest(unittest.TestCase):
             self.assertIsInstance(atom, pybiomol.PdbAtom)
             self.assertIs(atom.u11, None)
         str(atom)
+
+
+    def test_pdb_can_bond_het_atoms(self):
+        self.check_atom_bonds_other_atoms(3194, [3195, 3196])
+        self.check_atom_bonds_other_atoms(3195, [3194])
+        self.check_atom_bonds_other_atoms(3196, [3194, 3197])
+        self.check_atom_bonds_other_atoms(3197, [3196, 3198, 3199])
+        self.check_atom_bonds_other_atoms(3198, [3197])
+        self.check_atom_bonds_other_atoms(3199, [3197])
+        self.check_atom_bonds_other_atoms(3224, [3225, 3226])
+        self.check_atom_bonds_other_atoms(3225, [3224])
+        self.check_atom_bonds_other_atoms(3226, [3224, 3227])
+        self.check_atom_bonds_other_atoms(3227, [3226, 3228, 3229])
+        self.check_atom_bonds_other_atoms(3228, [3227])
+        self.check_atom_bonds_other_atoms(3229, [3227])
 
 
 
