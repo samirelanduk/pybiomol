@@ -1,5 +1,6 @@
 import types
 from ..structure import chemstructure
+from ..structure import macrostructure
 from .residues import connection_data as _conn_data
 
 class Pdb:
@@ -67,8 +68,9 @@ class PdbModel(chemstructure.AtomicStructure):
         self.pdb = pdb
         self._create_atoms(data_file, model_num)
         self._create_explicit_bonds(data_file)
-        self._create_implicit_bonds(data_file)
+        self._create_implicit_bonds(data_file, model_num)
         self._create_small_molecules(data_file, model_num)
+        self._create_residues(data_file, model_num)
 
 
     def _create_atoms(self, data_file, model_num):
@@ -110,11 +112,12 @@ class PdbModel(chemstructure.AtomicStructure):
                  ).covalent_bond_to(self.get_atom_by_id(bonded_atom))
 
 
-    def _create_implicit_bonds(self, data_file):
+    def _create_implicit_bonds(self, data_file, model_num):
         for atom in data_file.atoms:
             residue_mates = [a for a in data_file.atoms
              if a["chain"] == atom["chain"]
-              and a["residue_number"] == atom["residue_number"]]
+              and a["residue_number"] == atom["residue_number"]
+               and a["model"] == model_num]
             bond_atom_names = _conn_data.get(atom["residue_name"], {}
              ).get(atom["name"], [])
             for name in bond_atom_names:
@@ -126,7 +129,7 @@ class PdbModel(chemstructure.AtomicStructure):
 
         for chain in sorted(list(set([a["chain"] for a in data_file.atoms]))):
             residue_numbers = sorted(list(set([a["residue_number"]
-             for a in data_file.atoms if a["chain"] == chain])))
+             for a in data_file.atoms if a["chain"] == chain and a["model"] == model_num])))
             for index, residue_number in enumerate(residue_numbers[:-1]):
                 carboxyl_atom_number = [a["number"] for a in data_file.atoms
                  if a["residue_number"] == residue_number and a["name"] == "C"]
@@ -145,15 +148,31 @@ class PdbModel(chemstructure.AtomicStructure):
     def _create_small_molecules(self, data_file, model_num):
         self.small_molecules = []
         residue_numbers = sorted(list(set([a["residue_number"]
-          for a in data_file.heteroatoms])))
+         for a in data_file.heteroatoms])))
         for residue_number in residue_numbers:
             het_code = [a["residue_name"] for a in data_file.heteroatoms
-              if a["residue_number"] == residue_number][0]
+             if a["residue_number"] == residue_number][0]
             atom_numbers = [a["number"] for a in data_file.heteroatoms
-              if a["residue_number"] == residue_number and a["model"] == model_num]
+             if a["residue_number"] == residue_number and a["model"] == model_num]
             molecule_type = self.pdb.get_small_molecule_type_by_code(het_code)
             self.small_molecules.append(
              molecule_type(*[self.get_atom_by_id(number) for number in atom_numbers])
+            )
+
+
+    def _create_residues(self, data_file, model_num):
+        self.residues = []
+        residue_numbers = sorted(list(set([a["residue_number"]
+         for a in data_file.atoms])))
+        for residue_number in residue_numbers:
+            residue_name = [a["residue_name"] for a in data_file.atoms
+             if a["residue_number"] == residue_number][0]
+            atom_numbers = [a["number"] for a in data_file.atoms
+             if a["residue_number"] == residue_number and a["model"] == model_num]
+            self.residues.append(PdbResidue(
+             residue_number,
+             residue_name,
+             *[self.get_atom_by_id(number) for number in atom_numbers])
             )
 
 
@@ -204,3 +223,13 @@ class PdbSmallMolecule(chemstructure.Molecule):
         chemstructure.Molecule.__init__(self, *atoms)
         for atom in self.atoms:
             atom.molecule = self
+
+
+
+class PdbResidue(macrostructure.Residue):
+
+    def __init__(self, residue_id, *args, **kwargs):
+        self.residue_id = residue_id
+        macrostructure.Residue.__init__(self, *args, **kwargs)
+        for atom in self.atoms:
+            atom.residue = self

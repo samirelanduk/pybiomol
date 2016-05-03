@@ -186,6 +186,17 @@ class PdbModelTest(PdbTest):
                 self.assertEqual(atom.molecule, ligand)
 
 
+    def test_pdb_can_process_residues(self):
+        self.assertEqual(len(self.pdb.model.residues), 6)
+        for residue in self.pdb.model.residues:
+            self.assertIsInstance(residue, pybiomol.PdbResidue)
+            self.assertIsInstance(residue, pybiomol.Residue)
+            self.assertIsInstance(residue.name, str)
+            self.assertIsInstance(residue.residue_id, int)
+            for atom in residue.atoms:
+                self.assertEqual(atom.residue, residue)
+
+
 
 
 if __name__ == "__main__":

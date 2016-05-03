@@ -2,7 +2,7 @@ from .chemstructure import *
 
 class Residue(Molecule):
 
-    def __init__(self, name, atoms):
+    def __init__(self, name, *atoms):
         self.name = name
         Molecule.__init__(self, *atoms)
 
