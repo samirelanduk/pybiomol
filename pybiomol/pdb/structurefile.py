@@ -30,21 +30,22 @@ class Pdb:
         for attr in transfer_attrs:
             self.__dict__[attr] = self.data_file.__dict__[attr]
 
-        self.small_molecules = []
-        for het in self.data_file.het_names:
+        self.small_molecule_types = []
+        for het in set(list(self.data_file.het_names.keys())
+         + list(self.data_file.het_formulae.keys())):
             het_class = types.new_class(het, bases=(PdbSmallMolecule,))
-            het_class.het_symbol = het
+            het_class.het_code = het
             het_class.het_name = self.data_file.het_names.get(het)
             het_class.het_formula = self.data_file.het_formulae.get(het)["formula"]
             het_class.is_water = self.data_file.het_formulae.get(het)["is_water"]
             het_class.synonyms = self.data_file.het_synonyms.get(het)
-            het_class.__repr__ = lambda h: "<%s molecule>" % h.het_symbol
-            self.small_molecules.append(het_class)
+            het_class.__repr__ = lambda h: "<%s molecule>" % h.het_code
+            self.small_molecule_types.append(het_class)
 
         model_numbers = [
          model["model_num"] for model in self.data_file.models
         ] if self.data_file.models else [1]
-        self.models = [PdbModel(self.data_file, num) for num in model_numbers]
+        self.models = [PdbModel(self.data_file, num, self) for num in model_numbers]
         self.model = self.models[0]
 
 
@@ -52,13 +53,22 @@ class Pdb:
         return "<Pdb (%s)>" % (self.pdb_code if self.pdb_code else "????")
 
 
+    def get_small_molecule_type_by_code(self, code):
+        for small_molecule_type in self.small_molecule_types:
+            if small_molecule_type.het_code == code:
+                return small_molecule_type
+        return PdbSmallMolecule
+
+
 
 class PdbModel(chemstructure.AtomicStructure):
 
-    def __init__(self, data_file, model_num):
+    def __init__(self, data_file, model_num, pdb):
+        self.pdb = pdb
         self._create_atoms(data_file, model_num)
         self._create_explicit_bonds(data_file)
         self._create_implicit_bonds(data_file)
+        self._create_small_molecules(data_file, model_num)
 
 
     def _create_atoms(self, data_file, model_num):
@@ -102,23 +112,49 @@ class PdbModel(chemstructure.AtomicStructure):
 
     def _create_implicit_bonds(self, data_file):
         for atom in data_file.atoms:
-            residue_mates = [a for a in data_file.atoms if a["chain"] == atom["chain"] and a["residue_number"] == atom["residue_number"]]
-            bond_atom_names = _conn_data.get(atom["residue_name"], {}).get(atom["name"], [])
+            residue_mates = [a for a in data_file.atoms
+             if a["chain"] == atom["chain"]
+              and a["residue_number"] == atom["residue_number"]]
+            bond_atom_names = _conn_data.get(atom["residue_name"], {}
+             ).get(atom["name"], [])
             for name in bond_atom_names:
                 bonded_atom = [a for a in residue_mates if a["name"] == name]
                 bonded_atom = bonded_atom[0] if bonded_atom else None
                 if bonded_atom:
-                    self.get_atom_by_id(atom["number"]).covalent_bond_to(self.get_atom_by_id(bonded_atom["number"]))
+                    self.get_atom_by_id(atom["number"]).covalent_bond_to(
+                     self.get_atom_by_id(bonded_atom["number"]))
 
         for chain in sorted(list(set([a["chain"] for a in data_file.atoms]))):
-            residue_numbers = sorted(list(set([a["residue_number"] for a in data_file.atoms if a["chain"] == chain])))
+            residue_numbers = sorted(list(set([a["residue_number"]
+             for a in data_file.atoms if a["chain"] == chain])))
             for index, residue_number in enumerate(residue_numbers[:-1]):
-                carboxyl_atom_number = [a["number"] for a in data_file.atoms if a["residue_number"] == residue_number and a["name"] == "C"]
-                carboxyl_atom_number = carboxyl_atom_number[0] if carboxyl_atom_number else None
-                next_amino_nitrogen_number = [a["number"] for a in data_file.atoms if a["residue_number"] == residue_numbers[index+1] and a["name"] == "N"]
-                next_amino_nitrogen_number = next_amino_nitrogen_number[0] if next_amino_nitrogen_number else None
-                if carboxyl_atom_number is not None and next_amino_nitrogen_number is not None:
-                    self.get_atom_by_id(carboxyl_atom_number).covalent_bond_to(self.get_atom_by_id(next_amino_nitrogen_number))
+                carboxyl_atom_number = [a["number"] for a in data_file.atoms
+                 if a["residue_number"] == residue_number and a["name"] == "C"]
+                carboxyl_atom_number = carboxyl_atom_number[0]\
+                 if carboxyl_atom_number else None
+                next_amino_nitrogen_number = [a["number"] for a in data_file.atoms
+                 if a["residue_number"] == residue_numbers[index+1]
+                  and a["name"] == "N"]
+                next_amino_nitrogen_number = next_amino_nitrogen_number[0]\
+                 if next_amino_nitrogen_number else None
+                if carboxyl_atom_number != None and next_amino_nitrogen_number != None:
+                    self.get_atom_by_id(carboxyl_atom_number).covalent_bond_to(
+                     self.get_atom_by_id(next_amino_nitrogen_number))
+
+
+    def _create_small_molecules(self, data_file, model_num):
+        self.small_molecules = []
+        residue_numbers = sorted(list(set([a["residue_number"]
+          for a in data_file.heteroatoms])))
+        for residue_number in residue_numbers:
+            het_code = [a["residue_name"] for a in data_file.heteroatoms
+              if a["residue_number"] == residue_number][0]
+            atom_numbers = [a["number"] for a in data_file.heteroatoms
+              if a["residue_number"] == residue_number and a["model"] == model_num]
+            molecule_type = self.pdb.get_small_molecule_type_by_code(het_code)
+            self.small_molecules.append(
+             molecule_type(*[self.get_atom_by_id(number) for number in atom_numbers])
+            )
 
 
     def __repr__(self):

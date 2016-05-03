@@ -84,33 +84,33 @@ class PdbLigandClassTest(PdbTest):
 
     def test_can_create_ligand_classes(self):
         self.assertEqual(
-         len(self.pdb.small_molecules),
+         len(self.pdb.small_molecule_types),
          1
         )
         self.assertIsInstance(
-         self.pdb.small_molecules[0],
+         self.pdb.small_molecule_types[0],
          type
         )
 
 
     def test_ligand_class_structure(self):
         self.assertEqual(
-         self.pdb.small_molecules[0].het_symbol,
+         self.pdb.small_molecule_types[0].het_code,
          "BU2"
         )
         self.assertEqual(
-         self.pdb.small_molecules[0].het_name,
+         self.pdb.small_molecule_types[0].het_name,
          "1,3-BUTANEDIOL"
         )
         self.assertEqual(
-         self.pdb.small_molecules[0].het_formula,
+         self.pdb.small_molecule_types[0].het_formula,
          "2(C4 H10 O2)"
         )
         self.assertEqual(
-         self.pdb.small_molecules[0].synonyms,
+         self.pdb.small_molecule_types[0].synonyms,
          ["BUTYL-BUTYL-BUTYL-BUTALOL"]
         )
-        self.assertFalse(self.pdb.small_molecules[0].is_water)
+        self.assertFalse(self.pdb.small_molecule_types[0].is_water)
 
 
 
@@ -174,6 +174,14 @@ class PdbModelTest(PdbTest):
     def test_pdb_can_link_residues(self):
         self.check_atom_bonds_other_atoms(476, [482])
         self.check_atom_bonds_other_atoms(484, [493])
+
+
+    def test_pdb_can_process_ligands(self):
+        self.assertEqual(len(self.pdb.model.small_molecules), 2)
+        for ligand in self.pdb.model.small_molecules:
+            self.assertIsInstance(ligand, pybiomol.PdbSmallMolecule)
+            self.assertIsInstance(ligand, self.pdb.small_molecule_types[0])
+            str(ligand)
 
 
 
