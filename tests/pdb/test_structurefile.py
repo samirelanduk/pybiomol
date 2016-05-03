@@ -182,6 +182,8 @@ class PdbModelTest(PdbTest):
             self.assertIsInstance(ligand, pybiomol.PdbSmallMolecule)
             self.assertIsInstance(ligand, self.pdb.small_molecule_types[0])
             str(ligand)
+            for atom in ligand.atoms:
+                self.assertEqual(atom.molecule, ligand)
 
 
 

@@ -192,7 +192,7 @@ class PdbHetAtom(PdbAtom):
 
     def __init__(self, *args, **kwargs):
         PdbAtom.__init__(self, *args, **kwargs)
-        self.ligand = None
+        self.molecule = None
         del self.__dict__["residue"]
         del self.__dict__["chain"]
 
@@ -202,3 +202,5 @@ class PdbSmallMolecule(chemstructure.Molecule):
 
     def __init__(self, *atoms):
         chemstructure.Molecule.__init__(self, *atoms)
+        for atom in self.atoms:
+            atom.molecule = self
