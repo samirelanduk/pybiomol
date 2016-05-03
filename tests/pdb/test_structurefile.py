@@ -4,11 +4,14 @@ sys.path.append(".")
 import pybiomol
 import datetime
 
-class PdbInformationTest(unittest.TestCase):
+class PdbTest(unittest.TestCase):
 
     def setUp(self):
         self.pdb = pybiomol.get_pdb_from_file("tests/pdb/pdb_files/1SAM.pdb")
 
+
+
+class PdbInformationTest(PdbTest):
 
     def test_can_make_pdb(self):
         self.assertIsInstance(self.pdb, pybiomol.Pdb)
@@ -77,11 +80,43 @@ class PdbInformationTest(unittest.TestCase):
 
 
 
-class PdbModelTest(unittest.TestCase):
+class PdbLigandClassTest(PdbTest):
 
-    def setUp(self):
-        self.pdb = pybiomol.get_pdb_from_file("tests/pdb/pdb_files/1SAM.pdb")
+    def test_can_create_ligand_classes(self):
+        self.assertEqual(
+         len(self.pdb.small_molecules),
+         1
+        )
+        self.assertIsInstance(
+         self.pdb.small_molecules[0],
+         type
+        )
 
+
+    def test_ligand_class_structure(self):
+        self.assertEqual(
+         self.pdb.small_molecules[0].het_symbol,
+         "BU2"
+        )
+        self.assertEqual(
+         self.pdb.small_molecules[0].het_name,
+         "1,3-BUTANEDIOL"
+        )
+        self.assertEqual(
+         self.pdb.small_molecules[0].het_formula,
+         "2(C4 H10 O2)"
+        )
+        self.assertEqual(
+         self.pdb.small_molecules[0].synonyms,
+         ["BUTYL-BUTYL-BUTYL-BUTALOL"]
+        )
+        self.assertFalse(self.pdb.small_molecules[0].is_water)
+
+
+
+
+
+class PdbModelTest(PdbTest):
 
     def check_atom_bonds_other_atoms(self, atom_id, other_atom_ids):
         for other_atom_id in other_atom_ids:

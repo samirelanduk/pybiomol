@@ -98,6 +98,10 @@ class Molecule(AtomicStructure):
         AtomicStructure.__init__(self, *atoms)
 
 
+    def __repr__(self):
+        return "<Molecule (%i atoms)>" % len(self.atoms)
+
+
 
 class Bond:
 

@@ -1,3 +1,4 @@
+import types
 from ..structure import chemstructure
 from .residues import connection_data as _conn_data
 
@@ -28,6 +29,17 @@ class Pdb:
         ]
         for attr in transfer_attrs:
             self.__dict__[attr] = self.data_file.__dict__[attr]
+
+        self.small_molecules = []
+        for het in self.data_file.het_names:
+            het_class = types.new_class(het, bases=(PdbSmallMolecule,))
+            het_class.het_symbol = het
+            het_class.het_name = self.data_file.het_names.get(het)
+            het_class.het_formula = self.data_file.het_formulae.get(het)["formula"]
+            het_class.is_water = self.data_file.het_formulae.get(het)["is_water"]
+            het_class.synonyms = self.data_file.het_synonyms.get(het)
+            het_class.__repr__ = lambda h: "<%s molecule>" % h.het_symbol
+            self.small_molecules.append(het_class)
 
         model_numbers = [
          model["model_num"] for model in self.data_file.models
@@ -147,3 +159,10 @@ class PdbHetAtom(PdbAtom):
         self.ligand = None
         del self.__dict__["residue"]
         del self.__dict__["chain"]
+
+
+
+class PdbSmallMolecule(chemstructure.Molecule):
+
+    def __init__(self, *atoms):
+        chemstructure.Molecule.__init__(self, *atoms)
