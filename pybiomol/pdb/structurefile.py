@@ -44,6 +44,12 @@ class Pdb:
 class PdbModel(chemstructure.AtomicStructure):
 
     def __init__(self, data_file, model_num):
+        self._create_atoms(data_file, model_num)
+        self._create_explicit_bonds(data_file)
+        self._create_implicit_bonds(data_file)
+
+
+    def _create_atoms(self, data_file, model_num):
         atom_dicts = [
          a_dict for a_dict in data_file.atoms if a_dict["model"] == model_num
         ]
@@ -74,11 +80,15 @@ class PdbModel(chemstructure.AtomicStructure):
         all_atoms = self.macro_atoms + self.hetero_atoms
         chemstructure.AtomicStructure.__init__(self, *all_atoms)
 
+
+    def _create_explicit_bonds(self, data_file):
         for connection in data_file.connections:
             for bonded_atom in connection["bonded_atoms"]:
                 self.get_atom_by_id(connection["atom_number"]
                  ).covalent_bond_to(self.get_atom_by_id(bonded_atom))
 
+
+    def _create_implicit_bonds(self, data_file):
         for atom in data_file.atoms:
             residue_mates = [a for a in data_file.atoms if a["chain"] == atom["chain"] and a["residue_number"] == atom["residue_number"]]
             bond_atom_names = _conn_data.get(atom["residue_name"], {}).get(atom["name"], [])
@@ -97,7 +107,6 @@ class PdbModel(chemstructure.AtomicStructure):
                 next_amino_nitrogen_number = next_amino_nitrogen_number[0] if next_amino_nitrogen_number else None
                 if carboxyl_atom_number is not None and next_amino_nitrogen_number is not None:
                     self.get_atom_by_id(carboxyl_atom_number).covalent_bond_to(self.get_atom_by_id(next_amino_nitrogen_number))
-
 
 
     def __repr__(self):
